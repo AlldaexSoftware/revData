@@ -1,0 +1,261 @@
+[
+  {
+    "id": "medellin-olimpica",
+    "city": "Medellín",
+    "name": "Olímpica estereo",
+    "url": "https://onlineradiobox.com/co/olmpicamedellin/playlist/?cs=co.olmpicabogota",
+    "active": true
+  },
+  {
+    "id": "bogota-olimpica",
+    "city": "Bogotá",
+    "name": "Olímpica",
+    "url": "https://onlineradiobox.com/co/olmpicabogota/playlist/?cs=co.olmpicabogota",
+    "active": true
+  },
+  {
+    "id": "bogota-mix-radio",
+    "city": "Bogotá",
+    "name": "Mix Radio",
+    "url": "https://onlineradiobox.com/co/mix899/playlist/?cs=co.olmpicabogota",
+    "active": true
+  },
+  {
+    "id": "barranquilla-radio-tiempo",
+    "city": "Barranquilla",
+    "name": "Radio Tiempo",
+    "url": "https://onlineradiobox.com/co/tiempo961/playlist/?cs=co.olmpicabogota",
+    "active": true
+  },
+  {
+    "id": "medellin-mix-radio",
+    "city": "Medellín",
+    "name": "Mix Radio",
+    "url": "https://onlineradiobox.com/co/mix899/playlist/?cs=co.mix899",
+    "active": true
+  },
+  {
+    "id": "medellin-radio-tiempo",
+    "city": "Medellín",
+    "name": "Radio Tiempo",
+    "url": "https://onlineradiobox.com/co/tiempo1059/playlist/?cs=co.tiempo1059",
+    "active": true
+  },
+  {
+    "id": "medellin-la-crossover-fm",
+    "city": "Medellín",
+    "name": "La CrossOver FM",
+    "url": "https://onlineradiobox.com/co/lacrossover1053/playlist/?cs=co.lacrossover1053",
+    "active": true
+  },
+  {
+    "id": "medellin-radio-munera",
+    "city": "Medellín",
+    "name": "Radio Munera",
+    "url": "https://onlineradiobox.com/co/munera/playlist/?cs=co.munera",
+    "active": true
+  },
+  {
+    "id": "bogota-w-radio",
+    "city": "Bogotá",
+    "name": "W Radio",
+    "url": "https://onlineradiobox.com/co/wradio/playlist/?cs=co.wradio",
+    "active": true
+  },
+  {
+    "id": "medellin-frecuencia-estereo",
+    "city": "Medellín",
+    "name": "Frecuencia estéreo",
+    "url": "https://onlineradiobox.com/co/frecuenciaestereo/playlist/?cs=co.frecuenciaestereo",
+    "active": true
+  },
+  {
+    "id": "medellin-clasicos-de-reggaeton-by-pmpradio",
+    "city": "Medellín",
+    "name": "Clasicos De Reggaeton by PMPradio",
+    "url": "https://onlineradiobox.com/co/clasicosdereggaetonbypmpradio/playlist/?cs=co.clasicosdereggaetonbypmpradio",
+    "active": true
+  },
+  {
+    "id": "medellin-radio-disco-zh",
+    "city": "Medellín",
+    "name": "Radio Disco ZH",
+    "url": "https://onlineradiobox.com/co/discozh/playlist/?cs=co.discozh",
+    "active": true
+  },
+  {
+    "id": "bogota-vibra",
+    "city": "Bogotá",
+    "name": "Vibra",
+    "url": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+    "active": true
+  },
+  {
+    "id": "medellin-radio-autentica",
+    "city": "Medellín",
+    "name": "Radio Auténtica",
+    "url": "https://onlineradiobox.com/co/autentica1260/playlist/?cs=co.autentica1260",
+    "active": true
+  },
+  {
+    "id": "medellin-telemedellin-radio",
+    "city": "Medellín",
+    "name": "Telemedellín Radio",
+    "url": "https://onlineradiobox.com/co/telemedellin/playlist/?cs=co.telemedellin",
+    "active": true
+  },
+  {
+    "id": "medellin-radio-autentica-medellin",
+    "city": "Medellín",
+    "name": "Radio Auténtica Medellín",
+    "url": "https://onlineradiobox.com/co/autentica1260/playlist/?cs=co.autentica1260",
+    "active": true
+  },
+  {
+    "id": "medellin-hit-stereo-medellin",
+    "city": "Medellín",
+    "name": "Hit Stereo Medellin",
+    "url": "https://onlineradiobox.com/co/hitesteromedellin/playlist/?cs=co.hitesteromedellin",
+    "active": true
+  },
+  {
+    "id": "medellin-qbacana-radio",
+    "city": "Medellín",
+    "name": "QBacana Radio",
+    "url": "https://onlineradiobox.com/co/qbacana/playlist/?cs=co.qbacana",
+    "active": true
+  },
+  {
+    "id": "bogota-tropicana",
+    "city": "Bogotá",
+    "name": "Tropicana",
+    "url": "https://onlineradiobox.com/co/tropicana1029/playlist/?cs=co.tropicana1029",
+    "active": true
+  },
+  {
+    "id": "bogota-blu-radio",
+    "city": "Bogotá",
+    "name": "Blu Radio",
+    "url": "https://onlineradiobox.com/co/blu/playlist/?cs=co.blu",
+    "active": true
+  },
+  {
+    "id": "bogota-el-sol",
+    "city": "Bogotá",
+    "name": "El Sol",
+    "url": "https://onlineradiobox.com/co/elsol1054/playlist/?cs=co.elsol1054",
+    "active": true
+  },
+  {
+    "id": "bogota-radio-acktiva",
+    "city": "Bogotá",
+    "name": "Radio Acktiva",
+    "url": "https://onlineradiobox.com/co/acktiva/playlist/?cs=co.acktiva",
+    "active": true
+  },
+  {
+    "id": "bogota-candela-estereo",
+    "city": "Bogotá",
+    "name": "Candela Estereo",
+    "url": "https://onlineradiobox.com/co/candelaestereo/playlist/?cs=co.candelaestereo",
+    "active": true
+  },
+  {
+    "id": "bogota-fuego-am",
+    "city": "Bogotá",
+    "name": "Fuego AM",
+    "url": "https://onlineradiobox.com/co/fuegoam/playlist/?cs=co.fuegoam",
+    "active": true
+  },
+  {
+    "id": "bogota-los-40",
+    "city": "Bogotá",
+    "name": "Los 40",
+    "url": "https://onlineradiobox.com/co/los40principalesbogota/playlist/?cs=co.los40principalesbogota",
+    "active": true
+  },
+  {
+    "id": "bogota-en-tu-presencia-stereo",
+    "city": "Bogotá",
+    "name": "En Tu Presencia Stereo",
+    "url": "https://onlineradiobox.com/co/entupresencia/playlist/?cs=co.entupresencia",
+    "active": true
+  },
+  {
+    "id": "bogota-radio-nacional-de-colombia",
+    "city": "Bogotá",
+    "name": "Radio Nacional de Colombia",
+    "url": "https://onlineradiobox.com/co/nacionaldecolombia/playlist/?cs=co.nacionaldecolombia",
+    "active": true
+  },
+  {
+    "id": "bogota-javeriana-estereo",
+    "city": "Bogotá",
+    "name": "Javeriana Estéreo",
+    "url": "https://onlineradiobox.com/co/javeriana/playlist/?cs=co.javeriana",
+    "active": true
+  },
+  {
+    "id": "bogota-la-vallenata-fm",
+    "city": "Bogotá",
+    "name": "La Vallenata Fm",
+    "url": "https://onlineradiobox.com/co/lavallenata/playlist/?cs=co.lavallenata",
+    "active": true
+  },
+  {
+    "id": "bogota-capital-radio",
+    "city": "Bogotá",
+    "name": "Capital Radio",
+    "url": "https://onlineradiobox.com/co/capital/playlist/?cs=co.capital",
+    "active": true
+  },
+  {
+    "id": "bogota-vibra-fm",
+    "city": "Bogotá",
+    "name": "Vibra FM",
+    "url": "https://onlineradiobox.com/co/vibra1049/playlist/?cs=co.vibra1049",
+    "active": true
+  },
+  {
+    "id": "bogota-radio-los-8-de-colombia",
+    "city": "Bogotá",
+    "name": "Radio Los 8 De Colombia",
+    "url": "https://onlineradiobox.com/co/los8decolombia/playlist/?cs=co.los8decolombia",
+    "active": true
+  },
+  {
+    "id": "bogota-free-fm-classics",
+    "city": "Bogotá",
+    "name": "Free FM Classics",
+    "url": "https://onlineradiobox.com/co/rocaclasicos/playlist/?cs=co.rocaclasicos",
+    "active": true
+  },
+  {
+    "id": "bogota-rumba-fm",
+    "city": "Bogotá",
+    "name": "Rumba FM",
+    "url": "https://onlineradiobox.com/co/rumba/playlist/?cs=co.rumba",
+    "active": true
+  },
+  {
+    "id": "bogota-etd-radio-es-tiempo-de-dios",
+    "city": "Bogotá",
+    "name": "ETD Radio (Es Tiempo De Dios)",
+    "url": "https://onlineradiobox.com/co/etd/playlist/?cs=co.etd",
+    "active": true
+  },
+  {
+    "id": "bogota-el-dorado-radio-co",
+    "city": "Bogotá",
+    "name": "El Dorado Radio Co",
+    "url": "https://onlineradiobox.com/co/eldorado/playlist/?cs=co.eldorado",
+    "active": true
+  },
+  {
+    "id": "bogota-caribe-fm",
+    "city": "Bogotá",
+    "name": "Caribe FM",
+    "url": "https://onlineradiobox.com/co/caribefm/playlist/?cs=co.caribefm",
+    "active": true
+  }
+]

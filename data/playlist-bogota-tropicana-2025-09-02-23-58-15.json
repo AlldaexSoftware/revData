@@ -1,0 +1,51 @@
+{
+  "source": "https://onlineradiobox.com/co/tropicana1029/playlist/?cs=co.tropicana1029",
+  "station_id": "bogota-tropicana",
+  "station_city": "Bogotá",
+  "station_name": "Tropicana",
+  "station_label": "Bogotá - Tropicana",
+  "station_url": "https://onlineradiobox.com/co/tropicana1029/playlist/?cs=co.tropicana1029",
+  "scraped_at": "2025-09-02 23:58:15",
+  "count": 3,
+  "items": [
+    {
+      "station_id": "bogota-tropicana",
+      "station_city": "Bogotá",
+      "station_name": "Tropicana",
+      "station_label": "Bogotá - Tropicana",
+      "station_url": "https://onlineradiobox.com/co/tropicana1029/playlist/?cs=co.tropicana1029",
+      "date_played": "2025-09-02",
+      "time_played": "En directo",
+      "artist": "Víctor Manuelle",
+      "title": "Como una estrella",
+      "raw": "Víctor Manuelle - Como una estrella",
+      "link": "https://onlineradiobox.com/track/432457102280315679/"
+    },
+    {
+      "station_id": "bogota-tropicana",
+      "station_city": "Bogotá",
+      "station_name": "Tropicana",
+      "station_label": "Bogotá - Tropicana",
+      "station_url": "https://onlineradiobox.com/co/tropicana1029/playlist/?cs=co.tropicana1029",
+      "date_played": "2025-09-02",
+      "time_played": "09:24",
+      "artist": "Voltio,Calle 13",
+      "title": "Chulin culin chufly",
+      "raw": "Voltio,Calle 13 - Chulin culin chufly",
+      "link": "https://onlineradiobox.com/track/1891113536228981523/"
+    },
+    {
+      "station_id": "bogota-tropicana",
+      "station_city": "Bogotá",
+      "station_name": "Tropicana",
+      "station_label": "Bogotá - Tropicana",
+      "station_url": "https://onlineradiobox.com/co/tropicana1029/playlist/?cs=co.tropicana1029",
+      "date_played": "2025-09-02",
+      "time_played": "09:14",
+      "artist": "Jerry Rivera",
+      "title": "Amores como el nuestro",
+      "raw": "Jerry Rivera - Amores como el nuestro",
+      "link": "https://onlineradiobox.com/track/305846541039209741/"
+    }
+  ]
+}

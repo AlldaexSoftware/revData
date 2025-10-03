@@ -1,0 +1,51 @@
+{
+  "source": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+  "station_id": "bogota-vibra",
+  "station_city": "Bogotá",
+  "station_name": "Vibra",
+  "station_label": "Bogotá - Vibra",
+  "station_url": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+  "scraped_at": "2025-09-05 23:58:09",
+  "count": 3,
+  "items": [
+    {
+      "station_id": "bogota-vibra",
+      "station_city": "Bogotá",
+      "station_name": "Vibra",
+      "station_label": "Bogotá - Vibra",
+      "station_url": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+      "date_played": "2025-09-05",
+      "time_played": "En directo",
+      "artist": null,
+      "title": "Pandora Popurrí Pandora",
+      "raw": "Pandora Popurrí Pandora",
+      "link": "https://onlineradiobox.com/track/648559660914948152/"
+    },
+    {
+      "station_id": "bogota-vibra",
+      "station_city": "Bogotá",
+      "station_name": "Vibra",
+      "station_label": "Bogotá - Vibra",
+      "station_url": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+      "date_played": "2025-09-05",
+      "time_played": "23:50",
+      "artist": null,
+      "title": "Joe Vasconcellos Huellas",
+      "raw": "Joe Vasconcellos Huellas",
+      "link": "https://onlineradiobox.com/track/93158713/"
+    },
+    {
+      "station_id": "bogota-vibra",
+      "station_city": "Bogotá",
+      "station_name": "Vibra",
+      "station_label": "Bogotá - Vibra",
+      "station_url": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+      "date_played": "2025-09-05",
+      "time_played": "23:47",
+      "artist": null,
+      "title": "Grupo Frontera un x100to",
+      "raw": "Grupo Frontera un x100to",
+      "link": "https://onlineradiobox.com/track/2161875447090282891/"
+    }
+  ]
+}

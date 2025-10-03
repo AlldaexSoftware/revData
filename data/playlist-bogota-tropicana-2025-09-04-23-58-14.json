@@ -1,0 +1,38 @@
+{
+  "source": "https://onlineradiobox.com/co/tropicana1029/playlist/?cs=co.tropicana1029",
+  "station_id": "bogota-tropicana",
+  "station_city": "Bogotá",
+  "station_name": "Tropicana",
+  "station_label": "Bogotá - Tropicana",
+  "station_url": "https://onlineradiobox.com/co/tropicana1029/playlist/?cs=co.tropicana1029",
+  "scraped_at": "2025-09-04 23:58:14",
+  "count": 2,
+  "items": [
+    {
+      "station_id": "bogota-tropicana",
+      "station_city": "Bogotá",
+      "station_name": "Tropicana",
+      "station_label": "Bogotá - Tropicana",
+      "station_url": "https://onlineradiobox.com/co/tropicana1029/playlist/?cs=co.tropicana1029",
+      "date_played": "2025-09-04",
+      "time_played": "En directo",
+      "artist": "Daddy Yankee",
+      "title": "Gasolina",
+      "raw": "Daddy Yankee - Gasolina",
+      "link": "https://onlineradiobox.com/track/151172/"
+    },
+    {
+      "station_id": "bogota-tropicana",
+      "station_city": "Bogotá",
+      "station_name": "Tropicana",
+      "station_label": "Bogotá - Tropicana",
+      "station_url": "https://onlineradiobox.com/co/tropicana1029/playlist/?cs=co.tropicana1029",
+      "date_played": "2025-09-04",
+      "time_played": "09:44",
+      "artist": "J Balvin,Willy William",
+      "title": "Mi gente",
+      "raw": "J Balvin,Willy William - Mi gente",
+      "link": "https://onlineradiobox.com/track/864873229878101859/"
+    }
+  ]
+}

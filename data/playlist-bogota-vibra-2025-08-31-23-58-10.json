@@ -1,0 +1,51 @@
+{
+  "source": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+  "station_id": "bogota-vibra",
+  "station_city": "Bogotá",
+  "station_name": "Vibra",
+  "station_label": "Bogotá - Vibra",
+  "station_url": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+  "scraped_at": "2025-08-31 23:58:10",
+  "count": 3,
+  "items": [
+    {
+      "station_id": "bogota-vibra",
+      "station_city": "Bogotá",
+      "station_name": "Vibra",
+      "station_label": "Bogotá - Vibra",
+      "station_url": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+      "date_played": "2025-08-31",
+      "time_played": "En directo",
+      "artist": null,
+      "title": "Mon Laferte Mi Buen Amor (feat. Bunbury)",
+      "raw": "Mon Laferte Mi Buen Amor (feat. Bunbury)",
+      "link": "https://onlineradiobox.com/track/1585343828170444965/"
+    },
+    {
+      "station_id": "bogota-vibra",
+      "station_city": "Bogotá",
+      "station_name": "Vibra",
+      "station_label": "Bogotá - Vibra",
+      "station_url": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+      "date_played": "2025-08-31",
+      "time_played": "23:53",
+      "artist": "JORGE VILLAMIZAR",
+      "title": "JOSE GAVIRIA - SER FELIZ",
+      "raw": "JORGE VILLAMIZAR - JOSE GAVIRIA - SER FELIZ",
+      "link": "https://onlineradiobox.com/track/288394721813606712/"
+    },
+    {
+      "station_id": "bogota-vibra",
+      "station_city": "Bogotá",
+      "station_name": "Vibra",
+      "station_label": "Bogotá - Vibra",
+      "station_url": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+      "date_played": "2025-08-31",
+      "time_played": "23:49",
+      "artist": null,
+      "title": "KAROL G Coleccionando Heridas",
+      "raw": "KAROL G Coleccionando Heridas",
+      "link": "https://onlineradiobox.com/track/1044050640555087451/"
+    }
+  ]
+}

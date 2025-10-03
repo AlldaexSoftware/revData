@@ -1,0 +1,206 @@
+<%- include('partials/header', { active: 'profile' }) %>
+
+<section class="space-y-8">
+  <!-- Encabezado -->
+  <div class="rounded-xl p-6 bg-base-800/70 border border-base-700/60 flex flex-col sm:flex-row sm:items-center gap-6">
+    <div class="flex items-center gap-5">
+      <div class="w-16 h-16 rounded-lg bg-gradient-to-br from-accent-500/90 to-accent-600/90 flex items-center justify-center text-base-900 font-bold text-2xl shadow-glow select-none">
+        <%= (user && user.name ? user.name.charAt(0) : '?').toUpperCase() %>
+      </div>
+      <div>
+        <h2 class="text-xl font-semibold tracking-tight flex items-center gap-2">
+          Mi Perfil
+          <% if (user && user.role==='admin'){ %>
+            <span class="px-2 py-0.5 text-[10px] rounded bg-accent-500/15 text-accent-300 border border-accent-500/30">ADMIN</span>
+          <% } %>
+        </h2>
+        <p class="text-slatefx-300/60 text-xs mt-1">Actualiza tu información personal y credenciales.</p>
+      </div>
+    </div>
+    <% if (user) { %>
+    <div class="flex-1 grid sm:grid-cols-3 gap-3 text-xs">
+      <div class="px-3 py-2 rounded-md bg-base-900/40 border border-base-700/60">
+        <div class="uppercase tracking-wide text-[10px] text-slatefx-300/50">Usuario</div>
+        <div class="mt-0.5 font-semibold text-gray-100 flex items-center gap-1">
+          <span id="valUsername"><%= user.username %></span>
+          <button class="material-symbols-rounded text-[14px] text-slatefx-400/50 hover:text-accent-300 copyBtn" data-copy="<%= user.username %>"></button>
+        </div>
+      </div>
+      <div class="px-3 py-2 rounded-md bg-base-900/40 border border-base-700/60">
+        <div class="uppercase tracking-wide text-[10px] text-slatefx-300/50">Correo</div>
+        <div class="mt-0.5 text-gray-300 truncate flex items-center gap-1">
+          <span id="valEmail"><%= user.email || '-' %></span>
+          <% if (user.email) { %>
+            <button class="material-symbols-rounded text-[14px] text-slatefx-400/50 hover:text-accent-300 copyBtn" data-copy="<%= user.email %>">content_copy</button>
+          <% } %>
+        </div>
+      </div>
+      <div class="px-3 py-2 rounded-md bg-base-900/40 border border-base-700/60">
+        <div class="uppercase tracking-wide text-[10px] text-slatefx-300/50">Identificador</div>
+        <div class="mt-0.5 font-mono text-[11px] text-accent-300 flex items-center gap-1">
+          <span id="valId"><%= user.id %></span>
+          <button class="material-symbols-rounded text-[14px] text-slatefx-400/50 hover:text-accent-300 copyBtn" data-copy="<%= user.id %>">content_copy</button>
+        </div>
+      </div>
+    </div>
+    <% } %>
+  </div>
+
+  <% if (msg) { %>
+    <div id="toastSaved" class="px-4 py-3 rounded-md bg-green-700/40 border border-green-500/40 text-green-200 text-sm flex items-center gap-2 animate-fade-in">
+      <span class="material-symbols-rounded text-base">check_circle</span>
+      <span><%= msg %></span>
+      <button class="ml-auto material-symbols-rounded text-sm opacity-60 hover:opacity-100" onclick="this.parentElement.remove()">close</button>
+    </div>
+  <% } %>
+
+  <% if (!user) { %>
+    <div class="p-6 rounded-xl bg-base-800/70 border border-base-700/60 text-slatefx-300/70 text-sm">Usuario no encontrado.</div>
+  <% } else { %>
+  <!-- Formulario -->
+  <form method="post" action="/profile" class="space-y-8" id="profileForm">
+    <div class="rounded-xl p-6 bg-base-800/70 border border-base-700/60 space-y-6">
+      <h3 class="text-sm font-semibold tracking-wide text-slatefx-200 flex items-center gap-2">
+        Datos Personales
+        <span class="h-px flex-1 bg-gradient-to-r from-accent-500/40 to-transparent"></span>
+      </h3>
+      <div class="grid md:grid-cols-2 gap-5">
+        <div class="space-y-2">
+          <label class="text-[11px] uppercase tracking-wide text-slatefx-300/60">Nombre</label>
+          <input name="name" value="<%= user.name %>" required class="w-full px-3 py-2 rounded-md bg-base-900/50 border border-base-700/60 focus:outline-none focus:ring-1 focus:ring-accent-500/60 text-sm" />
+        </div>
+        <div class="space-y-2">
+          <label class="text-[11px] uppercase tracking-wide text-slatefx-300/60">Nueva contraseña</label>
+          <div class="relative">
+            <input id="passwordField" type="password" name="password" placeholder="(opcional)" class="w-full pr-10 px-3 py-2 rounded-md bg-base-900/50 border border-base-700/60 focus:outline-none focus:ring-1 focus:ring-accent-500/60 text-sm" />
+            <button type="button" id="togglePass" class="absolute right-2 top-1/2 -translate-y-1/2 text-slatefx-400/60 hover:text-accent-300 material-symbols-rounded text-base">visibility</button>
+          </div>
+          <div class="flex items-center gap-2 mt-2">
+            <div class="flex-1 h-1.5 rounded bg-base-700/60 overflow-hidden">
+              <div id="pwMeter" class="h-full w-0 bg-gradient-to-r from-red-500 via-yellow-500 to-green-500 transition-all"></div>
+            </div>
+            <span id="pwLabel" class="text-[10px] uppercase tracking-wide text-slatefx-400/60"></span>
+          </div>
+          <p class="text-[10px] text-slatefx-300/40 mt-1">Deja vacío para mantener la actual.</p>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-5">
+        <div class="space-y-2">
+          <label class="text-[11px] uppercase tracking-wide text-slatefx-300/60">CC</label>
+          <input disabled value="<%= user.cc || '-' %>" class="w-full px-3 py-2 rounded-md bg-base-900/30 border border-base-700/50 text-slatefx-400/70 text-sm" />
+        </div>
+        <div class="space-y-2">
+          <label class="text-[11px] uppercase tracking-wide text-slatefx-300/60">Rol</label>
+          <input disabled value="<%= user.role %>" class="w-full px-3 py-2 rounded-md bg-base-900/30 border border-base-700/50 text-slatefx-400/70 text-sm" />
+        </div>
+        <div class="space-y-2">
+          <label class="text-[11px] uppercase tracking-wide text-slatefx-300/60">Artistas asignados</label>
+          <div class="px-3 py-2 rounded-md bg-base-900/30 border border-base-700/50 text-slatefx-300/70 text-[11px] max-h-16 overflow-auto custom-scroll">
+            <% if ((user.artistsAssigned||[]).length){ %>
+              <%= user.artistsAssigned.join(', ') %>
+            <% } else { %>
+              <span class="text-slatefx-400/40">(ninguno)</span>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap gap-3 items-center">
+      <button class="px-5 py-2 rounded-lg bg-gradient-to-r from-accent-500 to-accent-600 text-base-900 text-sm font-semibold shadow-glow flex items-center gap-2" id="btnSave">
+        <span class="material-symbols-rounded text-base">save</span> Guardar cambios
+      </button>
+      <a href="/" class="px-4 py-2 rounded-lg bg-base-700/60 hover:bg-base-600/60 text-xs font-semibold border border-base-600/50">Cancelar</a>
+      <div id="saving" class="hidden text-[11px] text-slatefx-300/60 flex items-center gap-2">
+        <span class="w-3 h-3 rounded-full border-2 border-accent-400 border-t-transparent animate-spin"></span> Guardando...
+      </div>
+    </div>
+  </form>
+  <% } %>
+</section>
+
+<%- include('partials/footer') %>
+
+<script>
+(function(){
+  const pwd = document.getElementById('passwordField');
+  const meter = document.getElementById('pwMeter');
+  const label = document.getElementById('pwLabel');
+  const toggle = document.getElementById('togglePass');
+  const form = document.getElementById('profileForm');
+  const btnSave = document.getElementById('btnSave');
+  const saving = document.getElementById('saving');
+
+  function scorePassword(v){
+    if(!v) return 0;
+    let s = 0;
+    const sets = [
+      /[a-z]/.test(v),
+      /[A-Z]/.test(v),
+      /\d/.test(v),
+      /[^A-Za-z0-9]/.test(v)
+    ].filter(Boolean).length;
+    s += sets * 10;
+    s += Math.min(30, v.length * 4);
+    if(v.length>=12) s+=10;
+    return Math.min(100, s);
+  }
+  function updateMeter(){
+    const v = pwd.value;
+    const sc = scorePassword(v);
+    meter.style.width = sc + '%';
+    let txt='';
+    if(sc===0) txt='';
+    else if(sc<30) txt='Débil';
+    else if(sc<60) txt='Media';
+    else if(sc<80) txt='Fuerte';
+    else txt='Excelente';
+    label.textContent=txt;
+    meter.classList.toggle('bg-red-500', sc<30);
+    meter.classList.toggle('bg-yellow-500', sc>=30 && sc<60);
+    meter.classList.toggle('bg-green-500', sc>=60);
+  }
+  if(pwd){
+    pwd.addEventListener('input', updateMeter);
+  }
+  if(toggle){
+    toggle.addEventListener('click', ()=>{
+      if(!pwd.value) pwd.focus();
+      const t = pwd.getAttribute('type')==='password'?'text':'password';
+      pwd.setAttribute('type', t);
+      toggle.textContent = t==='password' ? 'visibility' : 'visibility_off';
+    });
+  }
+
+  // Copy buttons
+  document.querySelectorAll('.copyBtn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const val = btn.dataset.copy;
+      if(!val || !navigator.clipboard) return;
+      navigator.clipboard.writeText(val).then(()=>{
+        btn.classList.add('text-accent-300');
+        setTimeout(()=> btn.classList.remove('text-accent-300'), 900);
+      });
+    });
+  });
+
+  // Guardado feedback
+  if(form){
+    form.addEventListener('submit', ()=>{
+      saving.classList.remove('hidden');
+      btnSave.disabled=true;
+      btnSave.classList.add('opacity-60','pointer-events-none');
+    });
+  }
+
+  // Auto-ocultar toast
+  const toast = document.getElementById('toastSaved');
+  if(toast){
+    setTimeout(()=> {
+      toast.classList.add('opacity-0','translate-y-1','transition');
+      setTimeout(()=> toast.remove(), 400);
+    }, 3000);
+  }
+})();
+</script>

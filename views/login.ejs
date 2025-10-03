@@ -1,0 +1,146 @@
+<%- include('partials/header') %>
+
+<div class="relative min-h-screen flex items-center justify-center px-4 py-12 overflow-hidden">
+  <!-- Decorative background -->
+  <div class="absolute inset-0 -z-10">
+    <div class="absolute inset-0 bg-gradient-to-br from-base-900 via-base-800 to-base-900"></div>
+    <div class="absolute inset-0 opacity-40 mix-blend-overlay"
+      style="background:
+        radial-gradient(circle at 12% 18%, rgba(255,138,61,.18), transparent 60%),
+        radial-gradient(circle at 82% 78%, rgba(56,189,248,.20), transparent 60%),
+        linear-gradient(140deg, rgba(255,255,255,.05), transparent)">
+    </div>
+    <div class="pointer-events-none absolute inset-0 backdrop-[150px]"></div>
+  </div>
+
+  <div class="w-full max-w-md">
+    <div class="mb-10 text-center space-y-3">
+      
+      <h1 class="text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-accent-400 to-accent-200">
+        Iniciar sesión
+      </h1>
+      <p class="text-sm text-slatefx-300/60">Accede a tu panel personalizado de monitoreo</p>
+    </div>
+
+    <div class="relative group">
+      <div class="absolute -inset-[1px] rounded-2xl bg-gradient-to-br from-accent-500/40 via-transparent to-sky-400/30 opacity-70 group-hover:opacity-100 blur transition"></div>
+      <div class="relative rounded-2xl bg-base-900/60 backdrop-blur-xl border border-base-700/60 px-7 py-8 shadow-xl space-y-6">
+        <% if (error) { %>
+          <div class="flex items-start gap-2 p-3 rounded-md bg-red-600/15 border border-red-500/30 text-red-300 text-xs">
+            <!-- Heroicon: Exclamation Triangle -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m12 9 0 3.75m0 3 .008-.008L12 15.75Zm9-3.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+            </svg>
+            <span class="leading-snug"><%= error %></span>
+          </div>
+        <% } %>
+
+        <form method="post" action="/login" class="space-y-5" novalidate>
+          <!-- Username -->
+            <label class="block space-y-1.5">
+              <span class="flex items-center gap-2 text-[11px] font-medium tracking-wide uppercase text-slatefx-300/60">
+                <!-- Heroicon: User -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 7.5a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 20.118a7.5 7.5 0 0 1 15 0A17.933 17.933 0 0 1 12 21.75c-2.68 0-5.216-.584-7.5-1.632Z"/>
+                </svg>
+                Usuario
+              </span>
+              <div class="relative">
+                <input name="username" required autocomplete="username"
+                  class="peer w-full px-4 py-2.5 rounded-lg bg-base-800/70 border border-base-700/60 focus:outline-none focus:ring-2 focus:ring-accent-500/40 text-sm text-gray-100 placeholder-slatefx-400/40"
+                  placeholder="tu_usuario" />
+                <div class="absolute inset-y-0 right-2 flex items-center pointer-events-none">
+                  <span class="text-[10px] px-2 py-0.5 rounded bg-base-700/60 text-slatefx-400/70 border border-base-600/50">REQ</span>
+                </div>
+              </div>
+            </label>
+
+          <!-- Password -->
+            <label class="block space-y-1.5">
+              <span class="flex items-center gap-2 text-[11px] font-medium tracking-wide uppercase text-slatefx-300/60">
+                <!-- Heroicon: Lock Closed -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V7.875a4.5 4.5 0 1 0-9 0V10.5m-.75 0h10.5A2.25 2.25 0 0 1 19.5 12.75v6A2.25 2.25 0 0 1 17.25 21H6.75A2.25 2.25 0 0 1 4.5 18.75v-6A2.25 2.25 0 0 1 6.75 10.5"/>
+                </svg>
+                Contraseña
+              </span>
+              <div class="relative">
+                <input id="pw" type="password" name="password" required autocomplete="current-password"
+                  class="peer w-full pr-10 px-4 py-2.5 rounded-lg bg-base-800/70 border border-base-700/60 focus:outline-none focus:ring-2 focus:ring-accent-500/40 text-sm text-gray-100 placeholder-slatefx-400/40"
+                  placeholder="••••••••" />
+                <button type="button" id="btnPw" tabindex="-1"
+                  class="absolute inset-y-0 right-0 px-3 flex items-center text-slatefx-400/50 hover:text-accent-300 transition">
+                  <!-- Heroicon: Eye -->
+                  <svg id="icoEye" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.64 0 8.577 3.01 9.964 7.183.07.207.07.432 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.64 0-8.577-3.01-9.964-7.178Z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                  </svg>
+                  <!-- Heroicon: Eye Slash -->
+                  <svg id="icoEyeOff" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 hidden" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m3.53 3.53 16.94 16.94M9.88 9.885a3 3 0 0 0 4.242 4.242M6.228 6.232A10.451 10.451 0 0 0 2.04 12.322c1.387 4.173 5.323 7.183 9.963 7.183 1.81 0 3.533-.473 5.02-1.302M9.88 9.885 6.23 6.235m8.245 3.154c.41.558.652 1.248.652 1.993 0 .745-.242 1.435-.652 1.993m0-3.986L17.77 6.23"/>
+                  </svg>
+                </button>
+              </div>
+            </label>
+
+          <!-- Extras -->
+          <div class="flex items-center justify-between text-xs">
+            <label class="inline-flex items-center gap-2 cursor-pointer select-none">
+              <input type="checkbox" name="remember" class="accent-accent-500 h-3.5 w-3.5 rounded bg-base-800/70 border-base-600/60" />
+              <span class="text-slatefx-300/60">Recordarme</span>
+            </label>
+            <a href="#" class="text-accent-400/90 hover:text-accent-300 transition">¿Olvidaste tu contraseña?</a>
+          </div>
+
+          <!-- Submit -->
+          <button id="btnLogin"
+            class="w-full relative overflow-hidden px-5 py-3 rounded-lg font-semibold text-sm tracking-wide bg-gradient-to-r from-accent-500 to-accent-600 text-base-900 shadow-glow focus:outline-none focus:ring-2 focus:ring-accent-500/40 flex items-center justify-center gap-2">
+            <span class="inline-flex items-center gap-2">
+              <!-- Heroicon: Arrow Right -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 -ml-1" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0-6.75 6.75M19.5 12 12.75 5.25"/>
+              </svg>
+              Entrar
+            </span>
+            <span id="spinner" class="hidden absolute inset-0 flex items-center justify-center">
+              <svg class="w-4 h-4 animate-spin text-base-900" viewBox="0 0 24 24" fill="none">
+                <circle class="opacity-20" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
+                <path class="opacity-80" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+                      d="M22 12a10 10 0 0 0-10-10"/>
+              </svg>
+            </span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <p class="mt-8 text-center text-[11px] text-slatefx-400/40 tracking-wide">
+      &copy; <%= new Date().getFullYear() %> Revmusic · Acceso restringido
+    </p>
+  </div>
+</div>
+
+<script>
+(function(){
+  const pw = document.getElementById('pw');
+  const btnPw = document.getElementById('btnPw');
+  const eye = document.getElementById('icoEye');
+  const eyeOff = document.getElementById('icoEyeOff');
+  const btnLogin = document.getElementById('btnLogin');
+  const spinner = document.getElementById('spinner');
+
+  btnPw?.addEventListener('click', ()=>{
+    const vis = pw.type === 'password';
+    pw.type = vis ? 'text' : 'password';
+    eye.classList.toggle('hidden', !vis);
+    eyeOff.classList.toggle('hidden', vis);
+  });
+
+  btnLogin?.closest('form')?.addEventListener('submit', ()=>{
+    btnLogin.disabled = true;
+    spinner.classList.remove('hidden');
+  });
+})();
+</script>
+
+<%- include('partials/footer') %>

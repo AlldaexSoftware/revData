@@ -1,0 +1,388 @@
+<%- include('partials/header', { active: 'home' }) %>
+
+<section class="space-y-10">
+
+  <!-- Hero -->
+  <div class="rounded-2xl p-7 bg-gradient-to-br from-base-800/80 via-base-800/40 to-base-900/60 border border-base-700/60 relative overflow-hidden">
+    <div class="absolute inset-0 pointer-events-none opacity-30"
+         style="background:
+          radial-gradient(circle at 15% 20%, rgba(255,90,90,.20), transparent 55%),
+          radial-gradient(circle at 85% 70%, rgba(255,120,50,.18), transparent 55%),
+          linear-gradient(120deg, rgba(255,255,255,.04), transparent);"></div>
+    <div class="relative flex flex-col xl:flex-row xl:items-center gap-8">
+      <div class="flex-1 space-y-4">
+        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tighter leading-tight">
+          Bienvenido <span class="text-accent-400"><%= me ? me.name : 'Invitado' %></span>
+        </h1>
+        <p class="text-slatefx-300/70 max-w-xl text-sm md:text-base">
+          REVDATA centraliza snapshots de reproducción para analizar tendencias, artistas y evolución temporal.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <% if (me && me.role==='admin') { %>
+            <a href="/admin/users" class="px-4 py-2 rounded-lg bg-base-700/70 hover:bg-base-600/70 border border-base-600/50 text-xs font-semibold tracking-wide">Gestionar Usuarios</a>
+          <% } %>
+          <a href="/user/dashboard" class="px-4 py-2 rounded-lg bg-gradient-to-r from-accent-500 to-accent-600 text-base-900 text-xs font-semibold shadow-glow">Mi Dashboard</a>
+          <a href="/profile" class="px-4 py-2 rounded-lg bg-base-700/60 hover:bg-base-600/60 border border-base-600/50 text-xs font-semibold">Perfil</a>
+        </div>
+      </div>
+      <div class="w-full max-w-md grid grid-cols-3 gap-4">
+        <div class="p-4 rounded-xl bg-base-900/50 border border-base-700/60 flex flex-col">
+          <span class="text-[11px] uppercase tracking-wide text-slatefx-300/50">Artistas únicos</span>
+          <span class="mt-2 text-2xl font-bold text-gray-100 counter" data-target="<%= stats.uniqueArtists %>">0</span>
+          <span class="mt-auto text-[10px] text-slatefx-300/40">Detectados</span>
+        </div>
+        <div class="p-4 rounded-xl bg-base-900/50 border border-base-700/60 flex flex-col">
+          <span class="text-[11px] uppercase tracking-wide text-slatefx-300/50">Reproducciones</span>
+          <span class="mt-2 text-2xl font-bold text-gray-100 counter" data-target="<%= stats.totalPlays %>">0</span>
+          <span class="mt-auto text-[10px] text-slatefx-300/40">Acumulado</span>
+        </div>
+        <div class="p-4 rounded-xl bg-base-900/50 border border-base-700/60 flex flex-col">
+          <span class="text-[11px] uppercase tracking-wide text-slatefx-300/50">Snapshots</span>
+          <span class="mt-2 text-2xl font-bold text-gray-100 counter" data-target="<%= stats.recent.length %>">0</span>
+          <span class="mt-auto text-[10px] text-slatefx-300/40">Últimos registros</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grid principal -->
+  <div class="grid 2xl:grid-cols-3 gap-8">
+    <div class="space-y-8 2xl:col-span-2">
+
+      <!-- Timeline & Sparkline -->
+      <div class="rounded-xl p-6 bg-base-800/70 border border-base-700/60">
+        <div class="flex items-center justify-between gap-4 flex-wrap">
+          <h3 class="text-sm font-semibold tracking-wide text-slatefx-200 flex items-center gap-2">
+            Actividad reciente
+            <span class="text-[11px] font-normal text-slatefx-300/50">Snapshots secuenciales</span>
+          </h3>
+          <div class="flex items-center gap-2 text-[11px] text-slatefx-400/60">
+            <span class="w-2.5 h-2.5 rounded-full bg-accent-500/80"></span> Intensidad
+          </div>
+        </div>
+        <div class="mt-4 grid md:grid-cols-3 gap-5">
+          <!-- Lista -->
+            <div class="md:col-span-1 space-y-3 max-h-72 overflow-auto pr-1 custom-scroll">
+            <% if (stats.recent.length) {
+               const recentSorted = stats.recent.slice().reverse();
+               const maxAll = Math.max(...stats.recent.map(x=>x.count)) || 1;
+               recentSorted.forEach((r)=> {
+                 const ratio = r.count / maxAll;
+            %>
+              <div class="group relative p-3 rounded-lg bg-base-900/40 border border-base-700/50 hover:border-accent-500/40 transition">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="font-mono text-slatefx-300/70"><%= r.scraped_at %></span>
+                  <span class="font-semibold text-accent-300"><%= r.count %></span>
+                </div>
+                <div class="mt-2 h-1.5 rounded bg-base-700/60 overflow-hidden">
+                  <div class="h-full" style="width:<%= (ratio*100).toFixed(1) %>%; background:linear-gradient(90deg,#ff7043,#ffb347)"></div>
+                </div>
+              </div>
+            <% }) } else { %>
+              <div class="text-xs text-slatefx-400/50">Sin snapshots aún.</div>
+            <% } %>
+          </div>
+          <!-- Sparkline -->
+          <div class="md:col-span-2 flex flex-col">
+            <div class="flex-1 h-56 relative">
+              <canvas id="sparklineChart"></canvas>
+            </div>
+            <div class="grid sm:grid-cols-3 gap-4 mt-6 text-[11px]">
+              <div class="p-3 rounded-lg bg-base-900/40 border border-base-700/50">
+                <div class="uppercase tracking-wide text-slatefx-300/50">Promedio (últimos)</div>
+                <div class="mt-1 text-accent-300 font-semibold text-sm" id="avgSnap">-</div>
+              </div>
+              <div class="p-3 rounded-lg bg-base-900/40 border border-base-700/50">
+                <div class="uppercase tracking-wide text-slatefx-300/50">Máximo</div>
+                <div class="mt-1 text-accent-300 font-semibold text-sm" id="maxSnap">-</div>
+              </div>
+              <div class="p-3 rounded-lg bg-base-900/40 border border-base-700/50">
+                <div class="uppercase tracking-wide text-slatefx-300/50">Variación %</div>
+                <div class="mt-1 text-accent-300 font-semibold text-sm" id="varSnap">-</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exploración -->
+      <div class="rounded-xl p-6 bg-base-800/70 border border-base-700/60">
+        <div class="flex items-center justify-between gap-4 flex-wrap">
+          <h3 class="text-sm font-semibold tracking-wide text-slatefx-200">Explorar</h3>
+          <div class="flex gap-2 text-[11px]">
+            <a href="/user/dashboard" class="px-3 py-1.5 rounded bg-accent-500/20 hover:bg-accent-500/30 text-accent-200 border border-accent-500/30">Dashboard</a>
+            <a href="/profile" class="px-3 py-1.5 rounded bg-base-700/60 hover:bg-base-600/60 text-slatefx-200 border border-base-600/40">Perfil</a>
+            <% if (me && me.role==='admin') { %>
+              <a href="/admin/users" class="px-3 py-1.5 rounded bg-base-700/60 hover:bg-base-600/60 text-slatefx-200 border border-base-600/40">Usuarios</a>
+            <% } %>
+          </div>
+        </div>
+        <div class="mt-4 grid md:grid-cols-3 gap-5 text-xs">
+          <div class="p-4 rounded-lg bg-base-900/40 border border-base-700/50 flex flex-col">
+            <span class="uppercase tracking-wide text-[10px] text-slatefx-300/50">Insight</span>
+            <p class="mt-2 text-slatefx-300/70 leading-snug">Observa la evolución agregada por snapshot y filtra en tu panel personal.</p>
+          </div>
+          <div class="p-4 rounded-lg bg-base-900/40 border border-base-700/50 flex flex-col">
+            <span class="uppercase tracking-wide text-[10px] text-slatefx-300/50">Acceso rápido</span>
+            <p class="mt-2 text-slatefx-300/70 leading-snug">Gestión y análisis detallado en solo un clic.</p>
+          </div>
+          <div class="p-4 rounded-lg bg-base-900/40 border border-base-700/50 flex flex-col">
+            <span class="uppercase tracking-wide text-[10px] text-slatefx-300/50">Tendencia</span>
+            <p class="mt-2 text-slatefx-300/70 leading-snug">La línea derecha refleja volúmenes y variación recientes.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vista previa ciudades / emisoras -->
+      <div class="rounded-xl p-6 bg-base-800/70 border border-base-700/60">
+        <div class="flex items-center justify-between flex-wrap gap-4">
+          <h3 class="text-sm font-semibold tracking-wide text-slatefx-200 flex items-center gap-2">
+            Distribución preliminar
+            <span class="text-[10px] font-normal text-slatefx-300/50">Top Ciudades y Top Emisoras</span>
+          </h3>
+          <div class="text-[10px] text-slatefx-400/60">
+            <span class="hidden sm:inline">Fuente: últimos snapshots procesados</span>
+          </div>
+        </div>
+        <div class="mt-6 grid md:grid-cols-2 gap-8">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <h4 class="text-xs uppercase tracking-wide text-slatefx-300/60">Top Ciudades</h4>
+              <span class="text-[10px] text-slatefx-400/50"><%= stats.topCities.length %></span>
+            </div>
+            <div class="h-56 relative">
+              <canvas id="cityPreviewChart"></canvas>
+              <div id="cityPreviewEmpty" class="hidden absolute inset-0 flex items-center justify-center text-[11px] text-slatefx-400/50">Sin datos</div>
+            </div>
+            <ul class="text-[11px] space-y-1">
+              <% if (stats.topCities.length) {
+                   const maxC = Math.max(...stats.topCities.map(c=>c.count)) || 1;
+                   stats.topCities.forEach(c=>{
+                     const rc = (c.count / maxC)*100;
+              %>
+                <li class="flex items-center gap-2">
+                  <span class="w-20 truncate text-slatefx-200"><%= c.city %></span>
+                  <div class="flex-1 h-1.5 rounded bg-base-700/50 overflow-hidden">
+                    <div class="h-full" style="width:<%= rc.toFixed(1) %>%;background:linear-gradient(90deg,#4ade80,#22d3ee)"></div>
+                  </div>
+                  <span class="tabular-nums text-accent-300"><%= c.count %></span>
+                </li>
+              <% }) } else { %>
+                <li class="text-slatefx-400/50">Sin datos</li>
+              <% } %>
+            </ul>
+          </div>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <h4 class="text-xs uppercase tracking-wide text-slatefx-300/60">Top Emisoras</h4>
+              <span class="text-[10px] text-slatefx-400/50"><%= stats.topStations.length %></span>
+            </div>
+            <div class="h-56 relative">
+              <canvas id="stationPreviewChart"></canvas>
+              <div id="stationPreviewEmpty" class="hidden absolute inset-0 flex items-center justify-center text-[11px] text-slatefx-400/50">Sin datos</div>
+            </div>
+            <ul class="text-[11px] space-y-1">
+              <% if (stats.topStations.length) {
+                   const maxS = Math.max(...stats.topStations.map(s=>s.count)) || 1;
+                   stats.topStations.forEach(s=>{
+                     const rs = (s.count / maxS)*100;
+              %>
+                <li class="flex items-center gap-2">
+                  <span class="w-28 truncate text-slatefx-200" title="<%= s.station %>"><%= s.station %></span>
+                  <div class="flex-1 h-1.5 rounded bg-base-700/50 overflow-hidden">
+                    <div class="h-full" style="width:<%= rs.toFixed(1) %>%;background:linear-gradient(90deg,#ff8a3d,#ffb347)"></div>
+                  </div>
+                  <span class="tabular-nums text-accent-300"><%= s.count %></span>
+                </li>
+              <% }) } else { %>
+                <li class="text-slatefx-400/50">Sin datos</li>
+              <% } %>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Aside -->
+    <aside class="space-y-8">
+      <!-- Top artistas -->
+      <div class="rounded-xl p-6 bg-base-800/70 border border-base-700/60">
+        <div class="flex items-center justify-between gap-4">
+          <h3 class="text-sm font-semibold tracking-wide text-slatefx-200">Top Artistas</h3>
+          <button id="btnCopyTop" class="text-[11px] px-3 py-1.5 rounded bg-base-700/60 hover:bg-base-600/60 border border-base-600/40 text-slatefx-300">Copiar</button>
+        </div>
+        <div class="mt-4">
+          <% if (stats.topArtists && stats.topArtists.length) {
+               const maxTA = Math.max(...stats.topArtists.map(t=>t.count)) || 1;
+          %>
+            <ul class="space-y-3 text-xs" id="topArtistsList">
+              <% stats.topArtists.forEach((t,i)=>{
+                 const r = t.count / maxTA;
+              %>
+                <li class="group">
+                  <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-2 min-w-0">
+                      <span class="w-6 h-6 rounded-md bg-gradient-to-br from-accent-500/80 to-accent-600/80 text-base-900 font-semibold flex items-center justify-center text-[11px] shadow-glow"><%= i+1 %></span>
+                      <span class="truncate text-slatefx-200" title="<%= t.artist %>"><%= t.artist %></span>
+                    </div>
+                    <span class="font-semibold text-accent-300 tabular-nums"><%= t.count %></span>
+                  </div>
+                  <div class="mt-1 h-1.5 rounded bg-base-700/60 overflow-hidden">
+                    <div class="h-full" style="width:<%= (r*100).toFixed(1) %>%;background:linear-gradient(90deg,#4ade80,#22d3ee)"></div>
+                  </div>
+                </li>
+              <% }) %>
+            </ul>
+          <% } else { %>
+            <div class="text-[11px] text-slatefx-400/50">Sin datos todavía.</div>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Últimas ejecuciones (compact) -->
+      <div class="rounded-xl p-6 bg-base-800/70 border border-base-700/60">
+        <h3 class="text-sm font-semibold tracking-wide text-slatefx-200">Últimas ejecuciones</h3>
+        <ul class="mt-4 space-y-2 text-[11px] max-h-56 overflow-auto custom-scroll pr-1">
+          <% stats.recent.slice().reverse().forEach(r=>{ %>
+            <li class="flex items-center justify-between gap-4">
+              <span class="font-mono text-slatefx-300/70"><%= r.scraped_at %></span>
+              <span class="px-2 py-0.5 rounded bg-base-700/60 text-accent-300 font-semibold"><%= r.count %></span>
+            </li>
+          <% }) %>
+        </ul>
+      </div>
+
+    </aside>
+  </div>
+
+</section>
+
+<%- include('partials/footer') %>
+
+<script>
+(function(){
+  // Animar contadores
+  document.querySelectorAll('.counter').forEach(el=>{
+    const target = +el.dataset.target;
+    if(!target){ el.textContent='0'; return; }
+    let cur=0;
+    const steps=30;
+    const inc=target/steps;
+    function tick(){
+      cur+=inc;
+      if(cur>=target){ el.textContent=target.toLocaleString(); }
+      else { el.textContent=Math.round(cur).toLocaleString(); requestAnimationFrame(tick); }
+    }
+    requestAnimationFrame(tick);
+  });
+
+  // Sparkline
+  const ctx = document.getElementById('sparklineChart');
+  if(ctx && window.Chart){
+    const recent = <%- JSON.stringify(stats.recent || []) %>;
+    const labels = recent.map(r=>r.scraped_at);
+    const data = recent.map(r=>r.count);
+    const max = data.reduce((m,v)=> v>m?v:m,0) || 1;
+    const first = data[0]||0;
+    const last = data[data.length-1]||0;
+    const avg = data.length ? Math.round(data.reduce((a,b)=>a+b,0)/data.length) : 0;
+    const variation = first ? (((last-first)/first)*100).toFixed(1) : '0.0';
+    document.getElementById('avgSnap').textContent = avg;
+    document.getElementById('maxSnap').textContent = max;
+    document.getElementById('varSnap').textContent = (variation>0?'+':'')+variation+'%';
+
+    new Chart(ctx,{
+      type:'line',
+      data:{ labels, datasets:[{
+        label:'Reproducciones',
+        data,
+        borderColor:'#ff8a3d',
+        backgroundColor:'rgba(255,138,61,0.18)',
+        fill:true, tension:.3, pointRadius:0
+      }]},
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{ display:false }, tooltip:{ backgroundColor:'#141a1f', borderColor:'#2a333b', borderWidth:1 } },
+        scales:{
+          x:{ ticks:{ color:'#9aa5b1', maxRotation:45, minRotation:45 }, grid:{ color:'rgba(255,255,255,0.05)' } },
+          y:{ ticks:{ color:'#9aa5b1' }, grid:{ color:'rgba(255,255,255,0.05)' }, beginAtZero:true }
+        }
+      }
+    });
+  }
+
+  // Mini charts ciudades / emisoras
+  const topCities = <%- JSON.stringify(stats.topCities || []) %>;
+  const topStations = <%- JSON.stringify(stats.topStations || []) %>;
+
+  function pick(i,a=0.8){
+    const base=['#FF4D3D','#FF8A3D','#4FC3F7','#8E6CFF','#4ADE80','#FF5EB4','#FCD34D','#60A5FA','#34D399','#F472B6'];
+    const hex=base[i%base.length].slice(1);
+    const r=parseInt(hex.substr(0,2),16),g=parseInt(hex.substr(2,2),16),b=parseInt(hex.substr(4,2),16);
+    return 'rgba('+r+','+g+','+b+','+a+')';
+  }
+
+  if(window.Chart){
+    const cityCanvas=document.getElementById('cityPreviewChart');
+    if(cityCanvas){
+      if(!topCities.length){
+        document.getElementById('cityPreviewEmpty').classList.remove('hidden');
+      }else{
+        new Chart(cityCanvas,{
+          type:'bar',
+          data:{
+            labels: topCities.map(c=>c.city),
+            datasets:[{ label:'Plays', data: topCities.map(c=>c.count),
+              backgroundColor: topCities.map((_,i)=>pick(i,0.75)), borderRadius:6 }]
+          },
+          options:{
+            responsive:true, maintainAspectRatio:false,
+            plugins:{ legend:{ display:false }, tooltip:{ backgroundColor:'#141a1f', borderColor:'#2a333b', borderWidth:1 } },
+            scales:{
+              x:{ ticks:{ color:'#9aa5b1' }, grid:{ display:false } },
+              y:{ beginAtZero:true, ticks:{ color:'#9aa5b1' }, grid:{ color:'rgba(255,255,255,0.05)' } }
+            }
+          }
+        });
+      }
+    }
+    const stationCanvas=document.getElementById('stationPreviewChart');
+    if(stationCanvas){
+      if(!topStations.length){
+        document.getElementById('stationPreviewEmpty').classList.remove('hidden');
+      }else{
+        new Chart(stationCanvas,{
+          type:'bar',
+          data:{
+            labels: topStations.map(s=> s.station.length>20 ? s.station.slice(0,20)+'…' : s.station),
+            datasets:[{ label:'Plays', data: topStations.map(s=>s.count),
+              backgroundColor: topStations.map((_,i)=>pick(i+3,0.75)), borderRadius:6 }]
+          },
+          options:{
+            responsive:true, maintainAspectRatio:false,
+            plugins:{ legend:{ display:false }, tooltip:{ backgroundColor:'#141a1f', borderColor:'#2a333b', borderWidth:1 } },
+            scales:{
+              x:{ ticks:{ color:'#9aa5b1' }, grid:{ display:false } },
+              y:{ beginAtZero:true, ticks:{ color:'#9aa5b1' }, grid:{ color:'rgba(255,255,255,0.05)' } }
+            }
+          }
+        });
+      }
+    }
+  }
+
+  // Copiar top artistas
+  const topBtn = document.getElementById('btnCopyTop');
+  if(topBtn){
+    topBtn.addEventListener('click', ()=>{
+      const list = Array.from(document.querySelectorAll('#topArtistsList li span.truncate')).map(s=>s.textContent.trim()).join(', ');
+      if(!list) return;
+      navigator.clipboard?.writeText(list).then(()=>{
+        topBtn.textContent='Copiado!';
+        setTimeout(()=> topBtn.textContent='Copiar',1400);
+      });
+    });
+  }
+})();
+</script>

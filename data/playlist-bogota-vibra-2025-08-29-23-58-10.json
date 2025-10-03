@@ -1,0 +1,51 @@
+{
+  "source": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+  "station_id": "bogota-vibra",
+  "station_city": "Bogotá",
+  "station_name": "Vibra",
+  "station_label": "Bogotá - Vibra",
+  "station_url": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+  "scraped_at": "2025-08-29 23:58:10",
+  "count": 3,
+  "items": [
+    {
+      "station_id": "bogota-vibra",
+      "station_city": "Bogotá",
+      "station_name": "Vibra",
+      "station_label": "Bogotá - Vibra",
+      "station_url": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+      "date_played": "2025-08-29",
+      "time_played": "En directo",
+      "artist": null,
+      "title": "Bad Bunny Ojitos Lindos",
+      "raw": "Bad Bunny Ojitos Lindos",
+      "link": "https://onlineradiobox.com/track/1746998802896907877/"
+    },
+    {
+      "station_id": "bogota-vibra",
+      "station_city": "Bogotá",
+      "station_name": "Vibra",
+      "station_label": "Bogotá - Vibra",
+      "station_url": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+      "date_played": "2025-08-29",
+      "time_played": "23:50",
+      "artist": null,
+      "title": "Andrés Cepeda Se Morir",
+      "raw": "Andrés Cepeda Se Morir",
+      "link": "https://onlineradiobox.com/track/1585308235116516397/"
+    },
+    {
+      "station_id": "bogota-vibra",
+      "station_city": "Bogotá",
+      "station_name": "Vibra",
+      "station_label": "Bogotá - Vibra",
+      "station_url": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+      "date_played": "2025-08-29",
+      "time_played": "23:46",
+      "artist": null,
+      "title": "Grupo Kema Obsesion",
+      "raw": "Grupo Kema Obsesion",
+      "link": "https://onlineradiobox.com/track/864820302965813027/"
+    }
+  ]
+}

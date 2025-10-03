@@ -1,0 +1,51 @@
+{
+  "source": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+  "station_id": "bogota-vibra",
+  "station_city": "Bogotá",
+  "station_name": "Vibra",
+  "station_label": "Bogotá - Vibra",
+  "station_url": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+  "scraped_at": "2025-09-02 23:58:10",
+  "count": 3,
+  "items": [
+    {
+      "station_id": "bogota-vibra",
+      "station_city": "Bogotá",
+      "station_name": "Vibra",
+      "station_label": "Bogotá - Vibra",
+      "station_url": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+      "date_played": "2025-09-02",
+      "time_played": "En directo",
+      "artist": "Gustavo Cerati",
+      "title": "Adios",
+      "raw": "Gustavo Cerati - Adios",
+      "link": "https://onlineradiobox.com/track/49839369/"
+    },
+    {
+      "station_id": "bogota-vibra",
+      "station_city": "Bogotá",
+      "station_name": "Vibra",
+      "station_label": "Bogotá - Vibra",
+      "station_url": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+      "date_played": "2025-09-02",
+      "time_played": "23:52",
+      "artist": null,
+      "title": "Santiago Cruz Desde Lejos",
+      "raw": "Santiago Cruz Desde Lejos",
+      "link": "https://onlineradiobox.com/track/87693980/"
+    },
+    {
+      "station_id": "bogota-vibra",
+      "station_city": "Bogotá",
+      "station_name": "Vibra",
+      "station_label": "Bogotá - Vibra",
+      "station_url": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+      "date_played": "2025-09-02",
+      "time_played": "23:49",
+      "artist": null,
+      "title": "Sin Bandera Te Vi Venir",
+      "raw": "Sin Bandera Te Vi Venir",
+      "link": "https://onlineradiobox.com/track/433296/"
+    }
+  ]
+}

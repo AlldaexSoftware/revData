@@ -1,0 +1,337 @@
+<%- include('partials/header', { active: 'users' }) %>
+
+<section class="space-y-8">
+  <!-- Barra superior / métricas -->
+  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="rounded-xl p-4 bg-base-800/70 border border-base-700/50">
+      <div class="text-[11px] uppercase tracking-wide text-slatefx-300/60">Usuarios totales</div>
+      <div class="mt-2 text-2xl font-bold text-gray-100" id="mTotal"><%= users.length %></div>
+      <div class="mt-1 text-[11px] text-slatefx-300/50">Registrados</div>
+    </div>
+    <div class="rounded-xl p-4 bg-base-800/70 border border-base-700/50">
+      <div class="text-[11px] uppercase tracking-wide text-slatefx-300/60">Admins</div>
+      <div class="mt-2 text-2xl font-bold text-gray-100" id="mAdmins"><%= users.filter(u=>u.role==='admin').length %></div>
+      <div class="mt-1 text-[11px] text-slatefx-300/50">Con privilegios</div>
+    </div>
+    <div class="rounded-xl p-4 bg-base-800/70 border border-base-700/50">
+      <div class="text-[11px] uppercase tracking-wide text-slatefx-300/60">Usuarios con artistas</div>
+      <div class="mt-2 text-2xl font-bold text-gray-100" id="mWithArt"><%= users.filter(u=>u.artistsAssigned && u.artistsAssigned.length).length %></div>
+      <div class="mt-1 text-[11px] text-slatefx-300/50">Asignados</div>
+    </div>
+    <div class="rounded-xl p-4 bg-base-800/70 border border-base-700/50">
+      <div class="text-[11px] uppercase tracking-wide text-slatefx-300/60">Sin asignación</div>
+      <div class="mt-2 text-2xl font-bold text-gray-100" id="mNoArt"><%= users.filter(u=>!u.artistsAssigned || !u.artistsAssigned.length).length %></div>
+      <div class="mt-1 text-[11px] text-slatefx-300/50">Pendientes</div>
+    </div>
+  </div>
+
+  <!-- Controles -->
+  <div class="rounded-xl p-5 bg-base-800/70 border border-base-700/60 space-y-5">
+    <div class="flex flex-col lg:flex-row lg:items-center gap-4">
+      <div class="flex-1">
+        <h2 class="text-xl font-semibold tracking-tight">Administración de Usuarios</h2>
+        <p class="text-slatefx-300/60 text-sm mt-1">Gestiona cuentas, roles y asignaciones de artistas.</p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <button id="btnExport" class="px-4 py-2 rounded-lg bg-base-700/70 hover:bg-base-600/70 text-xs font-semibold border border-base-600/50">Exportar CSV</button>
+        <a href="/admin/users/new" class="px-4 py-2 rounded-lg bg-gradient-to-r from-accent-500 to-accent-600 text-base-900 text-sm font-semibold shadow-glow">Crear usuario</a>
+      </div>
+    </div>
+
+    <div class="grid lg:grid-cols-4 gap-4 text-sm">
+      <div class="lg:col-span-2 flex flex-col gap-2">
+        <label class="text-[11px] uppercase tracking-wide text-slatefx-300/60">Buscar</label>
+        <div class="relative">
+          <input id="userSearch" placeholder="Nombre, usuario, correo o artista..." class="w-full px-3 py-2 pr-9 rounded-md bg-base-900/60 border border-base-700/60 focus:outline-none focus:ring-1 focus:ring-accent-500/50" />
+          <span class="absolute right-2 top-1/2 -translate-y-1/2 text-slatefx-400/60 material-symbols-rounded text-base">search</span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-2">
+        <label class="text-[11px] uppercase tracking-wide text-slatefx-300/60">Filtrar rol</label>
+        <div class="flex gap-2">
+          <button data-role="" class="role-chip px-3 py-2 rounded-md bg-base-700/60 text-slatefx-300 text-xs border border-base-600/50 active-chip">Todos</button>
+          <button data-role="admin" class="role-chip px-3 py-2 rounded-md bg-base-700/60 text-slatefx-300 text-xs border border-base-600/50">Admin</button>
+          <button data-role="user" class="role-chip px-3 py-2 rounded-md bg-base-700/60 text-slatefx-300 text-xs border border-base-600/50">User</button>
+        </div>
+      </div>
+      <div class="flex flex-col gap-2">
+        <label class="text-[11px] uppercase tracking-wide text-slatefx-300/60">Asignación</label>
+        <select id="fAssign" class="px-3 py-2 rounded-md bg-base-900/60 border border-base-700/60 focus:outline-none focus:ring-1 focus:ring-accent-500/50">
+          <option value="">Todos</option>
+          <option value="with">Con artistas</option>
+            <option value="none">Sin artistas</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabla -->
+  <div class="rounded-xl overflow-hidden bg-base-800/70 border border-base-700/60">
+    <div class="overflow-auto custom-scroll max-h-[65vh]">
+      <table class="min-w-full text-sm">
+        <thead class="sticky top-0 bg-base-900/80 backdrop-blur z-10 text-[11px] uppercase tracking-wide text-slatefx-300/60">
+          <tr>
+            <th data-sort="cc" class="px-4 py-3 cursor-pointer select-none hover:text-accent-400">CC</th>
+            <th data-sort="name" class="px-4 py-3 cursor-pointer hover:text-accent-400">Nombre</th>
+            <th data-sort="email" class="px-4 py-3 cursor-pointer hover:text-accent-400">Correo</th>
+            <th data-sort="username" class="px-4 py-3 cursor-pointer hover:text-accent-400">Usuario</th>
+            <th data-sort="role" class="px-4 py-3 cursor-pointer hover:text-accent-400">Rol</th>
+            <th data-sort="artists" class="px-4 py-3 cursor-pointer hover:text-accent-400">Artistas asignados</th>
+            <th class="px-4 py-3 w-36">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="usersBody" class="divide-y divide-base-700/40">
+          <% users.forEach(u => { 
+             const artistCount = (u.artistsAssigned||[]).length;
+          %>
+          <tr class="hover:bg-base-700/40 transition" 
+              data-name="<%= (u.name||'').toLowerCase() %>" 
+              data-username="<%= (u.username||'').toLowerCase() %>"
+              data-email="<%= (u.email||'').toLowerCase() %>"
+              data-role="<%= u.role %>"
+              data-artists="<%= (u.artistsAssigned||[]).map(a=>a.toLowerCase()).join('|') %>"
+              data-has-artists="<%= artistCount>0 ? '1':'0' %>"
+              data-cc="<%= u.cc||'' %>"
+              data-count="<%= artistCount %>">
+            <td class="px-4 py-3 font-mono text-xs text-slatefx-300/70"><%= u.cc || '-' %></td>
+            <td class="px-4 py-3">
+              <div class="font-semibold text-gray-100 flex items-center gap-2">
+                <span><%= u.name %></span>
+                <% if(artistCount){ %>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-accent-500/15 text-accent-300 border border-accent-500/20"><%= artistCount %></span>
+                <% } %>
+              </div>
+              <div class="text-[10px] text-slatefx-300/40 mt-0.5">ID: <%= u.id %></div>
+            </td>
+            <td class="px-4 py-3">
+              <button type="button" class="copyEmail text-left group">
+                <span class="group-hover:text-accent-300 transition"><%= u.email || '-' %></span>
+              </button>
+            </td>
+            <td class="px-4 py-3"><span class="text-slatefx-200"><%= u.username %></span></td>
+            <td class="px-4 py-3">
+              <span class="px-2 py-1 rounded-md text-[11px] font-semibold tracking-wide 
+                <%= u.role==='admin' ? 'bg-gradient-to-r from-accent-500/90 to-accent-600/90 text-base-900' : 'bg-base-700/60 text-slatefx-200 border border-base-600/40' %>">
+                <%= u.role %>
+              </span>
+            </td>
+            <td class="px-4 py-3">
+              <% if (artistCount) { %>
+                <div class="flex flex-wrap gap-1.5 max-h-16 overflow-hidden relative artists-wrapper">
+                  <% u.artistsAssigned.forEach(a => { %>
+                    <span class="px-2 py-0.5 bg-base-700/60 rounded-full text-[11px] text-slatefx-200 border border-base-600/40" title="<%= a %>"><%= a.length>20 ? a.slice(0,19)+'…' : a %></span>
+                  <% }) %>
+                </div>
+                <% if (artistCount>6) { %>
+                  <button type="button" class="mt-2 text-[11px] text-accent-400 hover:underline toggleArtists">Ver más</button>
+                <% } %>
+              <% } else { %>
+                <span class="text-slatefx-400/50 text-xs">(ninguno)</span>
+              <% } %>
+            </td>
+            <td class="px-4 py-3">
+              <div class="flex flex-wrap gap-2">
+                <a href="/admin/users/<%= u.id %>/edit" class="px-2 py-1 text-xs rounded bg-base-700/60 hover:bg-base-600/60 border border-base-600/50">Editar</a>
+                <form method="post" action="/admin/users/<%= u.id %>/delete" onsubmit="return confirm('Eliminar usuario <%= u.username %>?')">
+                  <button type="submit" class="px-2 py-1 text-xs rounded bg-red-600/80 hover:bg-red-600 text-base-900 font-semibold">Del</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 border-t border-base-700/60 text-xs">
+      <div class="text-slatefx-300/60">
+        Filtrados: <span id="countFiltered" class="text-accent-300 font-semibold"></span>
+      </div>
+      <div class="flex items-center gap-3">
+        <button id="btnPrev" class="px-3 py-1 rounded bg-base-700/60 disabled:opacity-30">Prev</button>
+        <div class="text-slatefx-300/60">Página <span id="pageNum" class="text-accent-300 font-semibold"></span>/<span id="pageTotal"></span></div>
+        <button id="btnNext" class="px-3 py-1 rounded bg-base-700/60 disabled:opacity-30">Next</button>
+        <select id="pageSize" class="px-2 py-1 rounded bg-base-900/60 border border-base-700/60">
+          <option>10</option><option selected>20</option><option>40</option><option>100</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+
+<script>
+(function(){
+  const tbody = document.getElementById('usersBody');
+  const rowsAll = Array.from(tbody.querySelectorAll('tr'));
+  const search = document.getElementById('userSearch');
+  const roleChips = document.querySelectorAll('.role-chip');
+  const fAssign = document.getElementById('fAssign');
+  const countFiltered = document.getElementById('countFiltered');
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+  const pageNum = document.getElementById('pageNum');
+  const pageTotal = document.getElementById('pageTotal');
+  const pageSizeSel = document.getElementById('pageSize');
+  const btnExport = document.getElementById('btnExport');
+
+  let currentRole = '';
+  let currentAssign = '';
+  let sortField = '';
+  let sortDir = 1;
+  let page = 1;
+
+  function norm(s){ return (s||'').toString().toLowerCase(); }
+
+  roleChips.forEach(ch=>{
+    ch.addEventListener('click',()=>{
+      roleChips.forEach(c=>c.classList.remove('active-chip','bg-accent-500/30','text-accent-200'));
+      ch.classList.add('active-chip','bg-accent-500/30','text-accent-200');
+      currentRole = ch.dataset.role;
+      page=1; filter();
+    });
+  });
+  fAssign.addEventListener('change', ()=>{ currentAssign = fAssign.value; page=1; filter(); });
+  search.addEventListener('input', ()=>{ page=1; filter(); });
+
+  // Expandir artistas
+  tbody.addEventListener('click', e=>{
+    if(e.target.classList.contains('toggleArtists')){
+      const wrapper = e.target.previousElementSibling;
+      if(!wrapper) return;
+      const expanded = wrapper.classList.toggle('expanded');
+      if(expanded){
+        wrapper.style.maxHeight='none';
+        e.target.textContent='Ver menos';
+      }else{
+        wrapper.style.maxHeight='4rem';
+        e.target.textContent='Ver más';
+      }
+    }
+    if(e.target.classList.contains('copyEmail')){
+      const email = e.target.textContent.trim();
+      if(email && navigator.clipboard){
+        navigator.clipboard.writeText(email).then(()=>{
+          e.target.classList.add('text-accent-300');
+          setTimeout(()=> e.target.classList.remove('text-accent-300'),800);
+        });
+      }
+    }
+  });
+
+  // Sorting
+  document.querySelectorAll('thead th[data-sort]').forEach(th=>{
+    th.addEventListener('click',()=>{
+      const f = th.dataset.sort;
+      if(sortField===f) sortDir*=-1; else { sortField=f; sortDir=1; }
+      filter();
+      document.querySelectorAll('thead th[data-sort]').forEach(t=> t.classList.remove('text-accent-300'));
+      th.classList.add('text-accent-300');
+    });
+  });
+
+  function getSortValue(tr){
+    switch(sortField){
+      case 'name': return norm(tr.dataset.name);
+      case 'username': return norm(tr.dataset.username);
+      case 'email': return norm(tr.dataset.email);
+      case 'role': return tr.dataset.role;
+      case 'cc': return tr.dataset.cc || '';
+      case 'artists': return parseInt(tr.dataset.count||'0',10);
+      default: return '';
+    }
+  }
+
+  function filter(){
+    const q = norm(search.value);
+    let filtered = rowsAll.filter(r=>{
+      const role = r.dataset.role;
+      const hasArtists = r.dataset.hasArtists==='1';
+      if(currentRole && role!==currentRole) return false;
+      if(currentAssign==='with' && !hasArtists) return false;
+      if(currentAssign==='none' && hasArtists) return false;
+      if(q){
+        const blob = [
+          r.dataset.name,
+          r.dataset.username,
+          r.dataset.email,
+          r.dataset.artists
+        ].join(' ');
+        if(!blob.includes(q)) return false;
+      }
+      return true;
+    });
+
+    if(sortField){
+      filtered.sort((a,b)=>{
+        const va = getSortValue(a), vb = getSortValue(b);
+        if(va<vb) return -1*sortDir;
+        if(va>vb) return 1*sortDir;
+        return 0;
+      });
+    }
+
+    const size = parseInt(pageSizeSel.value,10);
+    const totalPages = Math.max(1, Math.ceil(filtered.length / size));
+    if(page>totalPages) page=totalPages;
+
+    tbody.innerHTML='';
+    filtered.slice((page-1)*size, (page-1)*size + size).forEach(r=> tbody.appendChild(r));
+
+    pageNum.textContent = page;
+    pageTotal.textContent = totalPages;
+    countFiltered.textContent = filtered.length;
+    btnPrev.disabled = page<=1;
+    btnNext.disabled = page>=totalPages;
+  }
+
+  btnPrev.addEventListener('click', ()=>{ if(page>1){ page--; filter(); }});
+  btnNext.addEventListener('click', ()=>{ page++; filter(); });
+  pageSizeSel.addEventListener('change', ()=>{ page=1; filter(); });
+
+  // Export CSV
+  btnExport.addEventListener('click', ()=>{
+    const headers = ['ID','CC','Nombre','Correo','Usuario','Rol','Artistas'];
+    const lines = [headers.join(',')];
+    rowsAll.forEach(r=>{
+      if(r.style.display==='none') return; // export sólo lo visible filtrado final
+    });
+    // Para exportar el dataset filtrado completo:
+    const q = norm(search.value);
+    const exportRows = rowsAll.filter(r=>{
+      const role = r.dataset.role;
+      const hasArtists = r.dataset.hasArtists==='1';
+      if(currentRole && role!==currentRole) return false;
+      if(currentAssign==='with' && !hasArtists) return false;
+      if(currentAssign==='none' && hasArtists) return false;
+      if(q){
+        const blob = [r.dataset.name,r.dataset.username,r.dataset.email,r.dataset.artists].join(' ');
+        if(!blob.includes(q)) return false;
+      }
+      return true;
+    });
+    exportRows.forEach(r=>{
+      const cols = r.querySelectorAll('td');
+      const idTxt = r.querySelector('div.text-[10px]')?.textContent.replace('ID:','').trim() || '';
+      const cc = (r.dataset.cc||'').replace(/,/g,'');
+      const name = (r.dataset.name||'').replace(/,/g,'');
+      const email = (r.dataset.email||'').replace(/,/g,'');
+      const username = (r.dataset.username||'').replace(/,/g,'');
+      const role = r.dataset.role;
+      const artists = (r.dataset.artists||'').split('|').filter(Boolean).join(';').replace(/,/g,';');
+      lines.push([idTxt, cc, '"'+name+'"', email, username, role, '"'+artists+'"'].join(','));
+    });
+    const blob = new Blob([lines.join('\n')], {type:'text/csv;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;
+    a.download='usuarios.csv';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); },500);
+  });
+
+  filter();
+})();
+</script>

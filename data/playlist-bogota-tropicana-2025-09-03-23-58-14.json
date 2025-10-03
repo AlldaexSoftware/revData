@@ -1,0 +1,25 @@
+{
+  "source": "https://onlineradiobox.com/co/tropicana1029/playlist/?cs=co.tropicana1029",
+  "station_id": "bogota-tropicana",
+  "station_city": "Bogotá",
+  "station_name": "Tropicana",
+  "station_label": "Bogotá - Tropicana",
+  "station_url": "https://onlineradiobox.com/co/tropicana1029/playlist/?cs=co.tropicana1029",
+  "scraped_at": "2025-09-03 23:58:14",
+  "count": 1,
+  "items": [
+    {
+      "station_id": "bogota-tropicana",
+      "station_city": "Bogotá",
+      "station_name": "Tropicana",
+      "station_label": "Bogotá - Tropicana",
+      "station_url": "https://onlineradiobox.com/co/tropicana1029/playlist/?cs=co.tropicana1029",
+      "date_played": "2025-09-03",
+      "time_played": "En directo",
+      "artist": "Leo Quinteros",
+      "title": "La enredadera",
+      "raw": "Leo Quinteros - La enredadera",
+      "link": "https://onlineradiobox.com/track/32520130/"
+    }
+  ]
+}

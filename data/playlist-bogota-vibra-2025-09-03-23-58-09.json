@@ -1,0 +1,51 @@
+{
+  "source": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+  "station_id": "bogota-vibra",
+  "station_city": "Bogotá",
+  "station_name": "Vibra",
+  "station_label": "Bogotá - Vibra",
+  "station_url": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+  "scraped_at": "2025-09-03 23:58:09",
+  "count": 3,
+  "items": [
+    {
+      "station_id": "bogota-vibra",
+      "station_city": "Bogotá",
+      "station_name": "Vibra",
+      "station_label": "Bogotá - Vibra",
+      "station_url": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+      "date_played": "2025-09-03",
+      "time_played": "En directo",
+      "artist": "Alejandro Lerner",
+      "title": "Secretos",
+      "raw": "Alejandro Lerner - Secretos",
+      "link": null
+    },
+    {
+      "station_id": "bogota-vibra",
+      "station_city": "Bogotá",
+      "station_name": "Vibra",
+      "station_label": "Bogotá - Vibra",
+      "station_url": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+      "date_played": "2025-09-03",
+      "time_played": "23:53",
+      "artist": null,
+      "title": "Shakira La Pared",
+      "raw": "Shakira La Pared",
+      "link": "https://onlineradiobox.com/track/182023479728351/"
+    },
+    {
+      "station_id": "bogota-vibra",
+      "station_city": "Bogotá",
+      "station_name": "Vibra",
+      "station_label": "Bogotá - Vibra",
+      "station_url": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+      "date_played": "2025-09-03",
+      "time_played": "23:49",
+      "artist": "Ricardo Arjona",
+      "title": "Cuando",
+      "raw": "Ricardo Arjona - Cuando",
+      "link": "https://onlineradiobox.com/track/781114/"
+    }
+  ]
+}

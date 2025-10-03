@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>REVDATA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            base: {
+              900: '#0E1419',
+              850: '#121A21',
+              800: '#162029',
+              750: '#1B2731',
+              700: '#22303A',
+              650: '#293842',
+              600: '#31424D',
+              500: '#3D4E59'
+            },
+            accent: {
+              50: '#FFEAE8',
+              100:'#FFC9C4',
+              200:'#FF9B91',
+              300:'#FF6D61',
+              400:'#FF4D3D',
+              500:'#FF3A27',
+              600:'#E22B19',
+              700:'#BD2213',
+              800:'#8C170B',
+              900:'#420903'
+            },
+            slatefx: {
+              100:'#D3DFE8',
+              300:'#A2B4C2',
+              500:'#748797',
+              700:'#4A5964',
+              800:'#394650'
+            }
+          },
+          boxShadow: {
+            glow: '0 0 0 1px rgba(255,77,61,0.18), 0 4px 18px -2px rgba(0,0,0,0.45), 0 8px 40px -4px rgba(255,58,39,0.15)'
+          },
+          backgroundImage: {
+            'soft-grid': 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0)',
+            'panel-fade': 'linear-gradient(145deg, rgba(255,255,255,0.04), rgba(255,255,255,0))'
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    html,body {scrollbar-color:#2f3d47 transparent;}
+    .panel {
+      background: linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0));
+      backdrop-filter: blur(4px);
+    }
+    .panel, .panel-soft { border-radius: 0.75rem; }
+    .panel-soft { background: rgba(22,32,41,0.65); }
+    .glass-border{position:relative}
+    .glass-border:before{
+      content:"";position:absolute;inset:0;border-radius:inherit;
+      padding:1px;background:linear-gradient(140deg,rgba(255,77,61,0.40),rgba(255,77,61,0) 60%);
+      -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+      -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+    }
+    canvas { image-rendering: optimizeQuality; }
+  </style>
+</head>
+<body class="bg-base-900 text-gray-100 antialiased selection:bg-accent-500/30 selection:text-white bg-soft-grid bg-[size:38px_38px]">
+  <div class="fixed inset-0 pointer-events-none opacity-[0.65] mix-blend-overlay"
+       style="background:
+        radial-gradient(circle at 20% 18%,rgba(255,74,61,0.10),transparent 55%),
+        radial-gradient(circle at 82% 72%,rgba(255,74,61,0.08),transparent 60%);"></div>
+
+  <header class="border-b border-base-700/50 bg-base-850/70 backdrop-blur-md shadow-[0_1px_0_0_rgba(255,255,255,0.04),0_4px_18px_-8px_rgba(0,0,0,0.5)]">
+    <div class="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between gap-6">
+      <a href="/" class="group flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-accent-400 via-accent-500 to-accent-700 flex items-center justify-center shadow-glow">
+          <svg viewBox="0 0 24 24" class="w-7 h-7 text-base-900">
+            <path fill="currentColor" d="M4 4h6.8c3.9 0 6.2 2 6.2 5.2 0 2.6-1.6 4.3-4.3 4.9L19 20h-4.6l-5.2-6.9v6.9H4V4Zm4.2 3.2v4.2h2.2c1.7 0 2.6-.7 2.6-2.1S12.3 7.2 10.4 7.2H8.2Z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="font-extrabold text-xl tracking-tight bg-gradient-to-r from-accent-300 via-accent-400 to-accent-500 bg-clip-text text-transparent">REVDATA</div>
+          <div class="text-[11px] uppercase tracking-[0.2em] text-slatefx-300/70">Radio Insights</div>
+        </div>
+      </a>
+
+      <div class="flex items-center gap-5 flex-1 justify-end">
+        <% if (me) { %>
+          <nav class="hidden lg:flex items-center gap-1 text-sm">
+            <a href="/" class="px-3 py-1.5 rounded-md hover:bg-base-700/60 transition <%= (active==='home')?'text-accent-300 bg-base-750/60':'' %>">Inicio</a>
+            <% if (me.role==='admin'){ %>
+              <a href="/admin/users" class="px-3 py-1.5 rounded-md hover:bg-base-700/60 transition <%= (active==='users')?'text-accent-300 bg-base-750/60':'' %>">Usuarios</a>
+              <a href="/admin/radios" class="px-3 py-1.5 rounded-md hover:bg-base-700/60 transition <%= (active==='radios')?'text-accent-300 bg-base-750/60':'' %>">Emisoras</a>
+            <% } %>
+            <a href="/user/dashboard" class="px-3 py-1.5 rounded-md hover:bg-base-700/60 transition <%= (active==='dashboard')?'text-accent-300 bg-base-750/60':'' %>">Dashboard</a>
+            <a href="/profile" class="px-3 py-1.5 rounded-md hover:bg-base-700/60 transition <%= (active==='profile')?'text-accent-300 bg-base-750/60':'' %>">Perfil</a>
+          </nav>
+
+          <div class="flex items-center gap-4">
+            <div class="flex items-center gap-3 px-3 py-1.5 rounded-xl bg-base-800/70 glass-border">
+              <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-accent-400 via-accent-500 to-accent-600 flex items-center justify-center font-bold text-base-900 text-lg">
+                <%= (me.name||me.username||'U').charAt(0).toUpperCase() %>
+              </div>
+              <div class="text-xs leading-tight">
+                <div class="text-[13px] font-semibold text-gray-100"><%= me.name %></div>
+                <div class="text-slatefx-300/70 tracking-wide"><%= me.role %></div>
+              </div>
+            </div>
+            <a href="/logout" class="px-4 py-2 rounded-lg text-sm font-semibold bg-gradient-to-r from-accent-500 to-accent-600 text-base-900 shadow-glow hover:brightness-105 transition">Salir</a>
+          </div>
+        <% } else { %>
+          <a href="/login" class="px-5 py-2.5 rounded-lg text-sm font-semibold bg-gradient-to-r from-accent-500 to-accent-600 text-base-900 shadow-glow hover:brightness-105 transition">Iniciar sesión</a>
+        <% } %>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-5 py-8 space-y-10">

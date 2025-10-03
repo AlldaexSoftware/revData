@@ -1,0 +1,928 @@
+<%- include('partials/header', { active: 'dashboard' }) %>
+
+<section class="space-y-10">
+  <div class="rounded-2xl p-6 bg-base-800/70 border border-base-700/60 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-30 pointer-events-none"
+      style="background:
+        radial-gradient(circle at 10% 15%, rgba(255,138,61,.18), transparent 55%),
+        radial-gradient(circle at 85% 80%, rgba(56,189,248,.20), transparent 55%),
+        linear-gradient(140deg, rgba(255,255,255,.05), transparent)"></div>
+
+    <div class="relative flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+      <div class="space-y-3">
+        <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight leading-tight flex flex-wrap items-center gap-3">
+          Panel del Usuario
+          <span class="px-2 py-1 text-[10px] rounded-md bg-accent-500/20 text-accent-300 border border-accent-500/30 tracking-wide">Revmusic</span>
+        </h2>
+        <p class="text-slatefx-300/70 text-sm md:text-[13px]">
+          Bienvenido <span class="text-accent-400 font-semibold"><%= me.name %></span>
+          <% if (stats && stats.artists.length) { %>
+            — Artistas: <span class="text-gray-200 font-medium"><%= stats.artists.join(', ') %></span>
+          <% } %>
+        </p>
+        <% if (!stats) { %>
+          <div class="mt-2 px-4 py-3 rounded-lg bg-base-900/60 border border-base-700/60 text-xs text-slatefx-300/60">
+            Sin artistas asignados aún. Contacta al administrador.
+          </div>
+        <% } %>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <button id="btnQuickExport" class="px-4 py-2 rounded-lg bg-base-700/60 hover:bg-base-600/60 text-xs font-semibold border border-base-600/50 flex items-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M7.5 12 12 16.5m0 0 4.5-4.5M12 16.5V3" />
+          </svg>
+          Exportar
+        </button>
+        <a href="/profile" class="px-4 py-2 rounded-lg bg-base-700/60 hover:bg-base-600/60 text-xs font-semibold border border-base-600/50 flex items-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 7.5a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 20.118a7.5 7.5 0 0 1 15 0A17.933 17.933 0 0 1 12 21.75c-2.68 0-5.216-.584-7.5-1.632Z"/>
+          </svg>
+          Perfil
+        </a>
+        <a href="/" class="px-4 py-2 rounded-lg bg-gradient-to-r from-accent-500 to-accent-600 text-base-900 text-xs font-semibold shadow-glow flex items-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 9.193-9.193a.75.75 0 0 1 1.06 0L21.75 12M4.5 9.75v9A1.5 1.5 0 0 0 6 20.25h3.75v-6h4.5v6H18A1.5 1.5 0 0 0 19.5 18.75v-9"/>
+          </svg>
+          Inicio
+        </a>
+      </div>
+    </div>
+
+    <% if (stats) { %>
+    <div class="grid xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mt-8 text-[11px]" id="kpiGrid">
+      <div class="p-4 rounded-xl bg-base-900/50 border border-base-700/60">
+        <div class="uppercase tracking-wide text-slatefx-300/50">Reproducciones</div>
+        <div class="mt-2 text-2xl font-bold text-gray-100 counter" data-target="<%= stats.totals.totalPlaysAssigned %>" id="kpiTotal">0</div>
+        <div class="mt-1 text-[10px] text-slatefx-300/40">Total acumulado</div>
+      </div>
+      <div class="p-4 rounded-xl bg-base-900/50 border border-base-700/60">
+        <div class="uppercase tracking-wide text-slatefx-300/50">Tracks únicos</div>
+        <div class="mt-2 text-2xl font-bold text-gray-100 counter" data-target="<%= stats.totals.uniqueTracksAssigned %>" id="kpiUnique">0</div>
+        <div class="mt-1 text-[10px] text-slatefx-300/40">Diferentes</div>
+      </div>
+      <div class="p-4 rounded-xl bg-base-900/50 border border-base-700/60">
+        <div class="uppercase tracking-wide text-slatefx-300/50">Artistas</div>
+        <div class="mt-2 text-2xl font-bold text-gray-100 counter" data-target="<%= stats.artists.length %>" id="kpiArtists">0</div>
+        <div class="mt-1 text-[10px] text-slatefx-300/40">Asignados</div>
+      </div>
+      <div class="p-4 rounded-xl bg-base-900/50 border border-base-700/60">
+        <div class="uppercase tracking-wide text-slatefx-300/50">Primer registro</div>
+        <div class="mt-2 text-xs font-semibold text-accent-300" id="kpiFirst"><%= stats.totals.firstSeen || '-' %></div>
+        <div class="mt-1 text-[10px] text-slatefx-300/40">Inicio</div>
+      </div>
+      <div class="p-4 rounded-xl bg-base-900/50 border border-base-700/60">
+        <div class="uppercase tracking-wide text-slatefx-300/50">Último registro</div>
+        <div class="mt-2 text-xs font-semibold text-accent-300" id="kpiLast"><%= stats.totals.lastSeen || '-' %></div>
+        <div class="mt-1 text-[10px] text-slatefx-300/40">Actualizado</div>
+      </div>
+      <div class="p-4 rounded-xl bg-base-900/50 border border-base-700/60">
+        <div class="uppercase tracking-wide text-slatefx-300/50 flex items-center gap-1">
+          Intensidad 24h
+        </div>
+        <div class="mt-2 text-2xl font-bold text-gray-100" id="kpi24h">0</div>
+        <div class="mt-1 text-[10px] text-slatefx-300/40">Últimas 24h</div>
+      </div>
+    </div>
+
+    <div class="mt-10 rounded-xl p-6 bg-base-800/60 border border-base-700/60 space-y-6" id="filterPanel">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <h3 class="text-sm font-semibold tracking-wide text-slatefx-200 flex items-center gap-2">
+          Filtros y Segmentación
+          <span class="px-2 py-0.5 rounded bg-base-900/50 border border-base-700/60 text-[10px] text-slatefx-400/70" id="liveSummary">0 plays filtrados</span>
+        </h3>
+        <div class="flex flex-wrap gap-2 text-[11px]">
+          <button id="btnToggleFilters" class="px-3 py-1.5 rounded bg-base-700/60 hover:bg-base-600/60 border border-base-600/50 flex items-center gap-1">
+            <svg id="icoToggleFilters" xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3.75v12m0 0L5.25 12.75m3 3L11.25 12.75M15.75 20.25v-12m0 0L12.75 11.25m3-3L18.75 11.25"/>
+            </svg>
+            <span id="txtToggleFilters">Minimizar</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="filtersBody" class="grid 2xl:grid-cols-7 gap-5 text-xs">
+        <div class="flex flex-col gap-2 2xl:col-span-2">
+          <label class="text-[10px] uppercase tracking-wide text-slatefx-300/60">Rango fechas</label>
+          <div class="flex items-center gap-2">
+            <input id="fStart" type="date" class="w-full px-3 py-2 rounded-md bg-base-900/60 border border-base-700/60 focus:outline-none focus:ring-1 focus:ring-accent-500/50" />
+            <span class="text-slatefx-500/50">→</span>
+            <input id="fEnd" type="date" class="w-full px-3 py-2 rounded-md bg-base-900/60 border border-base-700/60 focus:outline-none focus:ring-1 focus:ring-accent-500/50" />
+          </div>
+        </div>
+        <div class="flex flex-col gap-2">
+          <label class="text-[10px] uppercase tracking-wide text-slatefx-300/60">Artista</label>
+          <select id="fArtist" class="px-3 py-2 rounded-md bg-base-900/60 border border-base-700/60 focus:outline-none focus:ring-1 focus:ring-accent-500/50">
+            <option value="">Todos</option>
+            <% stats.artists.forEach(a => { %><option value="<%= a %>"><%= a %></option><% }) %>
+          </select>
+        </div>
+        <div class="flex flex-col gap-2">
+          <label class="text-[10px] uppercase tracking-wide text-slatefx-300/60">Track</label>
+          <input id="fTrack" placeholder="Texto..." class="px-3 py-2 rounded-md bg-base-900/60 border border-base-700/60 focus:outline-none focus:ring-1 focus:ring-accent-500/50" />
+        </div>
+        <div class="flex flex-col gap-2">
+          <label class="text-[10px] uppercase tracking-wide text-slatefx-300/60">Hora (mín/máx)</label>
+          <div class="flex items-center gap-2">
+            <input id="hMin" type="number" min="0" max="23" placeholder="0" class="w-1/2 px-2 py-2 rounded-md bg-base-900/60 border border-base-700/60 text-center focus:outline-none focus:ring-1 focus:ring-accent-500/50" />
+            <input id="hMax" type="number" min="0" max="23" placeholder="23" class="w-1/2 px-2 py-2 rounded-md bg-base-900/60 border border-base-700/60 text-center focus:outline-none focus:ring-1 focus:ring-accent-500/50" />
+          </div>
+        </div>
+        <div class="flex flex-col gap-2">
+          <label class="text-[10px] uppercase tracking-wide text-slatefx-300/60">Días semana</label>
+          <div class="grid grid-cols-7 gap-1">
+            <% ['D','L','M','M','J','V','S'].forEach((d,i)=> { %>
+              <button type="button" data-day="<%= i %>" class="dayBtn px-1.5 py-1 rounded bg-base-800/70 border border-base-700/60 text-[10px] text-slatefx-400/70 hover:bg-base-700/60"><%= d %></button>
+            <% }) %>
+          </div>
+        </div>
+        <div class="flex flex-col gap-2">
+          <label class="text-[10px] uppercase tracking-wide text-slatefx-300/60">Emisora</label>
+          <select id="fStation" class="px-3 py-2 rounded-md bg-base-900/60 border border-base-700/60 focus:outline-none focus:ring-1 focus:ring-accent-500/50">
+            <option value="">Todas</option>
+          </select>
+          <label class="text-[10px] uppercase tracking-wide text-slatefx-300/60 mt-3">Ciudad</label>
+          <select id="fCity" class="px-3 py-2 rounded-md bg-base-900/60 border border-base-700/60 focus:outline-none focus:ring-1 focus:ring-accent-500/50">
+            <option value="">Todas</option>
+          </select>
+        </div>
+        <div class="flex flex-col gap-2">
+          <label class="text-[10px] uppercase tracking-wide text-slatefx-300/60">Acciones</label>
+          <div class="flex gap-2">
+            <button id="btnApply" class="flex-1 px-3 py-2 rounded-md bg-accent-500/90 hover:bg-accent-500 text-base-900 font-semibold shadow-glow text-[11px] tracking-wide">Aplicar</button>
+            <button id="btnReset" class="px-3 py-2 rounded-md bg-base-700/70 hover:bg-base-700 text-slatefx-300 text-[11px] tracking-wide">Reset</button>
+          </div>
+          <div class="flex gap-2 mt-2">
+            <button id="btnCSV" class="flex-1 px-3 py-2 rounded-md bg-base-900/60 border border-base-700/60 hover:border-accent-500/40 text-[11px]">CSV</button>
+            <button id="btnJSON" class="flex-1 px-3 py-2 rounded-md bg-base-900/60 border border-base-700/60 hover:border-accent-500/40 text-[11px]">JSON</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-10 grid 2xl:grid-cols-3 gap-8">
+      <div class="2xl:col-span-2 space-y-8">
+        <div class="rounded-xl p-5 bg-base-800/70 border border-base-700/60">
+          <div class="flex items-start flex-wrap gap-4 justify-between">
+            <div>
+              <h3 class="font-semibold tracking-wide text-sm text-slatefx-100 flex items-center gap-2">
+                Tendencia por snapshot
+                <span class="text-[10px] font-normal text-slatefx-400/50" id="trendInfo"></span>
+              </h3>
+              <p class="text-[11px] text-slatefx-400/50 mt-1 max-w-md">Evolución de reproducciones por artista.</p>
+            </div>
+            <div class="flex flex-wrap gap-2 text-[10px]">
+              <button id="btnStack" class="px-2.5 py-1 rounded bg-base-700/60 hover:bg-base-600/60 border border-base-600/40">Stack</button>
+              <button id="btnLines" class="px-2.5 py-1 rounded bg-base-700/60 hover:bg-base-600/60 border border-base-600/40">Lines</button>
+              <button id="btnImg" class="px-2.5 py-1 rounded bg-base-700/60 hover:bg-base-600/60 border border-base-600/40">PNG</button>
+            </div>
+          </div>
+          <div class="mt-4 h-80 relative">
+            <canvas id="trendChart"></canvas>
+            <div id="trendEmpty" class="hidden absolute inset-0 flex items-center justify-center text-[11px] text-slatefx-400/50">Sin datos filtrados</div>
+          </div>
+        </div>
+
+        <div class="grid xl:grid-cols-2 gap-8">
+          <div class="rounded-xl p-5 bg-base-800/70 border border-base-700/60">
+            <h3 class="font-semibold tracking-wide text-sm text-slatefx-100 flex items-center gap-2">
+              Distribución horaria
+              <span class="text-[10px] text-slatefx-400/50" id="hourPeak"></span>
+            </h3>
+            <div class="mt-4 h-64"><canvas id="hourlyChart"></canvas></div>
+          </div>
+          <div class="rounded-xl p-5 bg-base-800/70 border border-base-700/60">
+            <h3 class="font-semibold tracking-wide text-sm text-slatefx-100 flex items-center gap-2">
+              Cumulativo
+              <span class="text-[10px] text-slatefx-400/50" id="cumInfo"></span>
+            </h3>
+            <div class="mt-4 h-64"><canvas id="cumulativeChart"></canvas></div>
+          </div>
+        </div>
+
+        <div class="grid xl:grid-cols-2 gap-8">
+          <div class="rounded-xl p-5 bg-base-800/70 border border-base-700/60">
+            <h3 class="font-semibold tracking-wide text-sm text-slatefx-100">Top Tracks</h3>
+            <div class="mt-4 h-72"><canvas id="topTracksChart"></canvas></div>
+          </div>
+          <div class="rounded-xl p-5 bg-base-800/70 border border-base-700/60">
+            <h3 class="font-semibold tracking-wide text-sm text-slatefx-100">Participación por artista</h3>
+            <div class="mt-4 h-72"><canvas id="artistPieChart"></canvas></div>
+          </div>
+        </div>
+
+        <div class="grid xl:grid-cols-2 gap-8">
+          <div class="rounded-xl p-5 bg-base-800/70 border border-base-700/60">
+            <h3 class="font-semibold tracking-wide text-sm text-slatefx-100">Distribución por emisora</h3>
+            <div class="mt-4 h-72"><canvas id="stationBarChart"></canvas></div>
+          </div>
+          <div class="rounded-xl p-5 bg-base-800/70 border border-base-700/60">
+            <h3 class="font-semibold tracking-wide text-sm text-slatefx-100">Distribución por ciudad</h3>
+            <div class="mt-4 h-72"><canvas id="cityPieChart"></canvas></div>
+          </div>
+        </div>
+
+        <div class="rounded-xl p-5 bg-base-800/70 border border-base-700/60 space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="font-semibold tracking-wide text-sm text-slatefx-100">Heatmap Hora vs Día</h3>
+            <div class="text-[10px] text-slatefx-400/50" id="heatInfo"></div>
+          </div>
+            <div class="h-96"><canvas id="heatmapChart"></canvas></div>
+        </div>
+
+        <div class="rounded-xl p-5 bg-base-800/70 border border-base-700/60 space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="font-semibold tracking-wide text-sm text-slatefx-100">Heatmap Ciudad vs Hora</h3>
+            <div class="text-[10px] text-slatefx-400/50" id="cityHeatInfo"></div>
+          </div>
+          <div class="h-96"><canvas id="cityHourHeatmap"></canvas></div>
+        </div>
+      </div>
+
+      <aside class="space-y-8">
+        <div class="rounded-xl p-5 bg-base-800/70 border border-base-700/60">
+          <h3 class="font-semibold tracking-wide text-sm text-slatefx-100 flex items-center justify-between">
+            Detalle por artista
+            <button id="btnCopyArtists" class="text-[10px] px-2 py-0.5 rounded bg-base-700/60 hover:bg-base-600/60 border border-base-600/40">Copiar</button>
+          </h3>
+          <ul class="mt-4 space-y-3 text-sm" id="artistBreakdown">
+            <% Object.entries(stats.totals.artistBreakdown).sort((a,b)=>b[1]-a[1]).forEach(([a,c]) => { %>
+              <li class="flex items-center justify-between">
+                <span class="truncate max-w-[60%] text-gray-200"><%= a %></span>
+                <span class="font-semibold text-accent-400"><%= c %></span>
+              </li>
+            <% }) %>
+          </ul>
+        </div>
+
+        <div class="rounded-xl p-5 bg-base-800/70 border border-base-700/60">
+          <h3 class="font-semibold tracking-wide text-sm text-slatefx-100 flex items-center justify-between">
+            Reproducciones recientes
+            <button id="btnMoreRecent" class="text-[10px] px-2 py-0.5 rounded bg-base-700/60 hover:bg-base-600/60 border border-base-600/40">+ Más</button>
+          </h3>
+          <ul class="mt-4 space-y-2 max-h-[340px] overflow-auto pr-1 text-[11px] leading-snug" id="recentList">
+            <% stats.recentPlays.forEach(p => { %>
+              <li class="flex flex-col border-b border-base-700/40 pb-2 last:border-none">
+                <span class="text-gray-200"><%= p.artist %></span>
+                <span class="text-slatefx-300/70"><%= p.title %></span>
+                <span class="text-[10px] text-slatefx-300/40 mt-0.5"><%= p.datetime %></span>
+              </li>
+            <% }) %>
+          </ul>
+        </div>
+
+        <div class="rounded-xl p-5 bg-base-800/70 border border-base-700/60">
+          <h3 class="font-semibold tracking-wide text-sm text-slatefx-100">Resumen dinámico</h3>
+          <div class="mt-4 space-y-3 text-[11px]" id="dynamicSummary">
+            <div class="flex items-center justify-between">
+              <span class="text-slatefx-400/60">% Top Artista</span><span id="smTopShare" class="font-semibold text-accent-300">-</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-slatefx-400/60">Promedio snapshot</span><span id="smAvgSnap" class="font-semibold text-accent-300">-</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-slatefx-400/60">Var. Último vs Ant.</span><span id="smVar" class="font-semibold text-accent-300">-</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-slatefx-400/60">Horas activas</span><span id="smActiveHours" class="font-semibold text-accent-300">-</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-xl p-5 bg-base-800/70 border border-base-700/60">
+          <h3 class="font-semibold tracking-wide text-sm text-slatefx-100">Descargas rápidas</h3>
+          <div class="mt-4 grid grid-cols-2 gap-3 text-[11px]">
+            <button id="dlTrend" class="px-3 py-2 rounded bg-base-900/50 border border-base-700/60 hover:border-accent-500/40">Trend PNG</button>
+            <button id="dlHourly" class="px-3 py-2 rounded bg-base-900/50 border border-base-700/60 hover:border-accent-500/40">Hourly PNG</button>
+            <button id="dlTopT" class="px-3 py-2 rounded bg-base-900/50 border border-base-700/60 hover:border-accent-500/40">TopTracks PNG</button>
+            <button id="dlHeat" class="px-3 py-2 rounded bg-base-900/50 border border-base-700/60 hover:border-accent-500/40">Heatmap PNG</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <% } %>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+
+<% if (stats) { %>
+<script>
+(function(){
+  const allPlays = <%- JSON.stringify(stats.allPlays||[]) %>;
+  const assignedArtists = <%- JSON.stringify(stats.artists||[]) %>;
+
+  const counters = document.querySelectorAll('.counter');
+  const kpi24h = document.getElementById('kpi24h');
+  const liveSummary = document.getElementById('liveSummary');
+
+  const fStart = document.getElementById('fStart');
+  const fEnd = document.getElementById('fEnd');
+  const fArtist = document.getElementById('fArtist');
+  const fTrack = document.getElementById('fTrack');
+  const hMin = document.getElementById('hMin');
+  const hMax = document.getElementById('hMax');
+  const fStation = document.getElementById('fStation');
+  const fCity = document.getElementById('fCity');
+  const btnApply = document.getElementById('btnApply');
+  const btnReset = document.getElementById('btnReset');
+  const dayBtns = document.querySelectorAll('.dayBtn');
+
+  const recentList = document.getElementById('recentList');
+  const artistBreakdownUL = document.getElementById('artistBreakdown');
+  const trendInfo = document.getElementById('trendInfo');
+  const hourPeak = document.getElementById('hourPeak');
+  const cumInfo = document.getElementById('cumInfo');
+  const heatInfo = document.getElementById('heatInfo');
+  const cityHeatInfo = document.getElementById('cityHeatInfo');
+  const smTopShare = document.getElementById('smTopShare');
+  const smAvgSnap = document.getElementById('smAvgSnap');
+  const smVar = document.getElementById('smVar');
+  const smActiveHours = document.getElementById('smActiveHours');
+  const trendEmpty = document.getElementById('trendEmpty');
+
+  const btnCSV = document.getElementById('btnCSV');
+  const btnJSON = document.getElementById('btnJSON');
+  const btnQuickExport = document.getElementById('btnQuickExport');
+  const btnCopyArtists = document.getElementById('btnCopyArtists');
+
+  const btnStack = document.getElementById('btnStack');
+  const btnLines = document.getElementById('btnLines');
+  const btnImg = document.getElementById('btnImg');
+
+  const dlTrend = document.getElementById('dlTrend');
+  const dlHourly = document.getElementById('dlHourly');
+  const dlTopT = document.getElementById('dlTopT');
+  const dlHeat = document.getElementById('dlHeat');
+
+  const btnToggleFilters = document.getElementById('btnToggleFilters');
+  const txtToggleFilters = document.getElementById('txtToggleFilters');
+  const icoToggleFilters = document.getElementById('icoToggleFilters');
+  const filtersBody = document.getElementById('filtersBody');
+
+  counters.forEach(el=>{
+    const target = +el.dataset.target;
+    let cur=0;
+    const steps=32;
+    const inc = target/steps || target;
+    function tick(){
+      cur+=inc;
+      if(cur>=target){ el.textContent=target.toLocaleString(); }
+      else { el.textContent=Math.round(cur).toLocaleString(); requestAnimationFrame(tick); }
+    }
+    requestAnimationFrame(tick);
+  });
+
+  (function calc24h(){
+    if(!allPlays.length){ kpi24h.textContent='0'; return; }
+    const now = new Date();
+    const cutoff = new Date(now.getTime()-24*3600*1000);
+    let count=0;
+    for(const p of allPlays){
+      const dt=new Date(p.datetime.replace(' ','T'));
+      if(dt>=cutoff) count++;
+    }
+    kpi24h.textContent = count;
+  })();
+
+  // Poblar selects estación / ciudad
+  (function populateStationCity(){
+    const stationSet = new Set();
+    const citySet = new Set();
+    allPlays.forEach(p=>{
+      if(p.station_label) stationSet.add(p.station_label);
+      if(p.station_city) citySet.add(p.station_city);
+    });
+    [...stationSet].sort().forEach(s=>{
+      const opt=document.createElement('option');
+      opt.value=s; opt.textContent=s;
+      fStation.appendChild(opt);
+    });
+    [...citySet].sort().forEach(c=>{
+      const opt=document.createElement('option');
+      opt.value=c; opt.textContent=c;
+      fCity.appendChild(opt);
+    });
+  })();
+
+  const activeDays = new Set();
+  dayBtns.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const d = btn.dataset.day;
+      if(activeDays.has(d)){
+        activeDays.delete(d);
+        btn.classList.remove('bg-accent-500/30','text-accent-200','border-accent-500/40');
+      } else {
+        activeDays.add(d);
+        btn.classList.add('bg-accent-500/30','text-accent-200','border-accent-500/40');
+      }
+      applyFilters();
+    });
+  });
+
+  function parseDT(s){ return new Date(s.replace(' ','T')); }
+  function withinRange(dt, start, end){ if(start && dt<start) return false; if(end && dt>end) return false; return true; }
+
+  let currentFiltered = [];
+  let currentTopTracks = [];
+  let cachedTrendLabels = [];
+  let cachedTrendTotals = [];
+  let stackedMode = false;
+
+  function applyFilters(){
+    const start = fStart.value ? new Date(fStart.value+'T00:00:00') : null;
+    const end = fEnd.value ? new Date(fEnd.value+'T23:59:59') : null;
+    const artistSel = (fArtist.value||'').toUpperCase();
+    const q = (fTrack.value||'').toLowerCase();
+    const hourMin = hMin.value==='' ? null : parseInt(hMin.value,10);
+    const hourMax = hMax.value==='' ? null : parseInt(hMax.value,10);
+    const stationSel = fStation.value;
+    const citySel = fCity.value;
+    const dayFilterActive = activeDays.size>0;
+
+    const filtered = allPlays.filter(p=>{
+      const dt = parseDT(p.datetime);
+      if(!withinRange(dt,start,end)) return false;
+      if(artistSel && p.artistNorm!==artistSel) return false;
+      if(q && !((p.title||'').toLowerCase().includes(q) || (p.artist||'').toLowerCase().includes(q))) return false;
+      const h = dt.getHours();
+      if(hourMin!=null && h<hourMin) return false;
+      if(hourMax!=null && h>hourMax) return false;
+      if(dayFilterActive && !activeDays.has(String(dt.getDay()))) return false;
+      if(stationSel && p.station_label !== stationSel) return false;
+      if(citySel && p.station_city !== citySel) return false;
+      return true;
+    });
+
+    rebuild(filtered);
+  }
+
+  function resetFilters(){
+    fStart.value='';
+    fEnd.value='';
+    fArtist.value='';
+    fTrack.value='';
+    hMin.value='';
+    hMax.value='';
+    fStation.value='';
+    fCity.value='';
+    activeDays.clear();
+    dayBtns.forEach(b=> b.classList.remove('bg-accent-500/30','text-accent-200','border-accent-500/40'));
+    applyFilters();
+  }
+
+  btnApply.addEventListener('click', e=>{ e.preventDefault(); applyFilters(); });
+  btnReset.addEventListener('click', e=>{ e.preventDefault(); resetFilters(); });
+  [fTrack,fArtist,fStart,fEnd,hMin,hMax,fStation,fCity].forEach(el=>{
+    el.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); applyFilters(); } });
+  });
+  [fStation,fCity].forEach(el=> el.addEventListener('change', applyFilters));
+
+  function download(name, content, type){
+    const blob=new Blob([content],{type});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url; a.download=name;
+    document.body.appendChild(a); a.click();
+    setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); },300);
+  }
+
+  btnCSV.addEventListener('click', ()=>{
+    const rows = currentFiltered.map(p=>[
+      p.datetime,p.artist,p.title,p.station_label,p.station_city
+    ].map(v=>'"'+(v||'').replace(/"/g,'""')+'"').join(','));
+    download('plays.csv','datetime,artist,title,station,city\n'+rows.join('\n'),'text/csv;charset=utf-8;');
+  });
+  btnJSON.addEventListener('click', ()=>{
+    download('plays.json', JSON.stringify(currentFiltered,null,2), 'application/json');
+  });
+  btnQuickExport.addEventListener('click', ()=>{
+    const pack = {
+      filteredCount: currentFiltered.length,
+      topTrackSample: currentTopTracks.slice(0,5),
+      snapshotSeries: cachedTrendLabels.map((lbl,i)=>({ snapshot: lbl, total: cachedTrendTotals[i]||0 })),
+      generated: new Date().toISOString()
+    };
+    download('dashboard_pack.json', JSON.stringify(pack,null,2),'application/json');
+  });
+
+  btnCopyArtists?.addEventListener('click', ()=>{
+    const txt = Array.from(artistBreakdownUL.querySelectorAll('li span:first-child')).map(s=>s.textContent.trim()).join(', ');
+    if(!txt) return;
+    navigator.clipboard?.writeText(txt);
+    btnCopyArtists.textContent='Ok';
+    setTimeout(()=> btnCopyArtists.textContent='Copiar',1000);
+  });
+
+  btnToggleFilters?.addEventListener('click', ()=>{
+    const hidden = filtersBody.classList.toggle('hidden');
+    txtToggleFilters.textContent = hidden ? 'Mostrar' : 'Minimizar';
+    icoToggleFilters.classList.toggle('rotate-180', hidden);
+  });
+
+  let trendChart, hourlyChart, cumulativeChart, topTracksChart,
+      artistPieChart, heatmapChart, stationBarChart, cityPieChart, cityHourHeatmap;
+
+  function kill(c){ if(c){ try{ c.destroy(); }catch(e){} } }
+
+  function pickColor(i, a=1){
+    const base = [
+      '#FF4D3D','#FF8A3D','#4FC3F7','#8E6CFF','#4ADE80',
+      '#FF5EB4','#FCD34D','#60A5FA','#34D399','#F472B6',
+      '#F87171','#A78BFA','#F59E0B','#10B981','#3B82F6'
+    ];
+    const hex = base[i % base.length].slice(1);
+    const r=parseInt(hex.substr(0,2),16),g=parseInt(hex.substr(2,2),16),b=parseInt(hex.substr(4,2),16);
+    return 'rgba('+r+','+g+','+b+','+a+')';
+  }
+
+  function rebuild(data){
+    currentFiltered = data;
+    liveSummary.textContent = data.length+' plays filtrados';
+    trendEmpty.classList.toggle('hidden', !!data.length);
+
+    // Artist breakdown
+    const artMap = {};
+    data.forEach(p=> artMap[p.artistNorm] = (artMap[p.artistNorm]||0)+1);
+    const artSorted = Object.entries(artMap).sort((a,b)=>b[1]-a[1]);
+    artistBreakdownUL.innerHTML = artSorted.length
+      ? artSorted.map(([a,c])=>'<li class="flex items-center justify-between"><span class="truncate max-w-[60%] text-gray-200">'+a+'</span><span class="font-semibold text-accent-400">'+c+'</span></li>').join('')
+      : '<li class="text-slatefx-300/50 text-xs">Sin datos</li>';
+
+    // Recent
+    const recent = data.slice().sort((a,b)=> b.datetime.localeCompare(a.datetime)).slice(0,40);
+    recentList.innerHTML = recent.length
+      ? recent.map(p=>'<li class="flex flex-col border-b border-base-700/40 pb-2 last:border-none"><span class="text-gray-200">'+p.artist+'</span><span class="text-slatefx-300/70">'+p.title+'</span><span class="text-[10px] text-slatefx-300/40 mt-0.5">'+p.datetime+'</span></li>').join('')
+      : '<li class="text-slatefx-300/50 text-xs">Sin datos</li>';
+
+    // Snapshots
+    const snapMap = new Map();
+    data.forEach(p=>{
+      if(!snapMap.has(p.snapshot)) snapMap.set(p.snapshot, []);
+      snapMap.get(p.snapshot).push(p);
+    });
+    const snapKeys = Array.from(snapMap.keys()).sort();
+    cachedTrendLabels = snapKeys;
+    cachedTrendTotals = snapKeys.map(k=> snapMap.get(k).length);
+    trendInfo.textContent = 'Snapshots: '+snapKeys.length;
+
+    // per artist series
+    const perArtist = {};
+    assignedArtists.forEach(a=> perArtist[a]=[]);
+    snapKeys.forEach(k=>{
+      const arr = snapMap.get(k);
+      const localCount = {};
+      arr.forEach(p=> localCount[p.artistNorm] = (localCount[p.artistNorm]||0)+1);
+      assignedArtists.forEach(a=> perArtist[a].push(localCount[a]||0));
+    });
+
+    // Hourly
+    const hours = new Array(24).fill(0);
+    data.forEach(p=>{
+      const h = +p.datetime.slice(11,13);
+      if(h>=0 && h<24) hours[h] += 1;
+    });
+    const peakHourIdx = hours.indexOf(Math.max(...hours));
+    hourPeak.textContent = hours.some(v=>v>0) ? 'Pico '+String(peakHourIdx).padStart(2,'0')+'h' : '';
+
+    // Cumulative
+    const chronological = data.slice().sort((a,b)=> a.datetime.localeCompare(b.datetime));
+    let acc=0;
+    const cumPoints = chronological.map(p=> ({ t:p.datetime, v: ++acc }));
+    cumInfo.textContent = cumPoints.length ? acc+' total' : '';
+
+    // Top tracks
+    const trackMap = {};
+    data.forEach(p=>{
+      const key=(p.title||'').trim().toLowerCase()+'||'+p.artist;
+      trackMap[key]=(trackMap[key]||0)+1;
+    });
+    const topTracks = Object.entries(trackMap).map(([k,c])=>{
+      const i=k.indexOf('||');
+      return { title:k.slice(0,i), artist:k.slice(i+2), count:c };
+    }).sort((a,b)=> b.count-a.count).slice(0,12);
+    currentTopTracks = topTracks;
+
+    // Station distribution
+    const stationMap = {};
+    data.forEach(p=>{
+      if(p.station_label) stationMap[p.station_label]=(stationMap[p.station_label]||0)+1;
+    });
+    const stationSorted = Object.entries(stationMap).sort((a,b)=>b[1]-a[1]).slice(0,15);
+
+    // City distribution
+    const cityMap = {};
+    data.forEach(p=>{
+      if(p.station_city) cityMap[p.station_city]=(cityMap[p.station_city]||0)+1;
+    });
+    const citySorted = Object.entries(cityMap).sort((a,b)=>b[1]-a[1]);
+
+    // Heatmap day-hour
+    const heat = {};
+    data.forEach(p=>{
+      const dt=parseDT(p.datetime);
+      const key=dt.getDay()+'|'+dt.getHours();
+      heat[key]=(heat[key]||0)+1;
+    });
+    const heatData = Object.entries(heat).map(([k,v])=>{
+      const [d,h]=k.split('|').map(Number);
+      return { d, h, v };
+    });
+    const maxHeat = heatData.reduce((m,o)=> o.v>m?o.v:m,0)||1;
+    heatInfo.textContent = heatData.length ? 'Máx celda '+maxHeat : '';
+
+    // City-hour heatmap
+    const ch = {};
+    data.forEach(p=>{
+      const dt=parseDT(p.datetime);
+      const key=p.station_city+'|'+dt.getHours();
+      ch[key]=(ch[key]||0)+1;
+    });
+    const chData = Object.entries(ch).map(([k,v])=>{
+      const i=k.lastIndexOf('|');
+      return { city:k.slice(0,i), h:+k.slice(i+1), v };
+    });
+    const citiesOrder = [...new Set(chData.map(o=>o.city))].sort();
+    const maxCH = chData.reduce((m,o)=> o.v>m?o.v:m,0)||1;
+    cityHeatInfo.textContent = chData.length ? 'Máx celda '+maxCH : '';
+
+    // Dynamic summary
+    const topShare = artSorted.length ? ((artSorted[0][1]/data.length)*100).toFixed(1)+'%' : '-';
+    smTopShare.textContent = data.length ? topShare : '-';
+    smActiveHours.textContent = hours.filter(v=>v>0).length || '-';
+    const snapTotals = cachedTrendTotals;
+    const avgSnap = snapTotals.length ? Math.round(snapTotals.reduce((a,b)=>a+b,0)/snapTotals.length) : 0;
+    smAvgSnap.textContent = avgSnap || '-';
+    if(snapTotals.length>1){
+      const last = snapTotals[snapTotals.length-1];
+      const prev = snapTotals[snapTotals.length-2]||0;
+      const varPct = prev ? (((last-prev)/prev)*100).toFixed(1) : '0.0';
+      smVar.textContent = (varPct>0?'+':'')+varPct+'%';
+    } else smVar.textContent='-';
+
+    const commonOpts = {
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{ labels:{ color:'#d0d4d8', usePointStyle:true, pointStyle:'circle' } },
+        tooltip:{ backgroundColor:'#141a1f', borderColor:'#2a333b', borderWidth:1 }
+      }
+    };
+
+    kill(trendChart);
+    trendChart = new Chart(document.getElementById('trendChart'), {
+      type:'line',
+      data:{
+        labels: snapKeys,
+        datasets: assignedArtists.map((a,i)=>({
+          label: a,
+          data: perArtist[a],
+          borderColor: pickColor(i,.95),
+            backgroundColor: pickColor(i, stackedMode ? 0.5 : 0.15),
+          fill: stackedMode,
+          tension:.25,
+          pointRadius:0,
+          borderWidth:2
+        }))
+      },
+      options:{
+        ...commonOpts,
+        interaction:{ mode:'index', intersect:false },
+        scales:{
+          x:{ ticks:{ color:'#9aa5b1', maxRotation:48, minRotation:48 }, grid:{ color:'rgba(255,255,255,0.05)' }, stacked: stackedMode },
+          y:{ beginAtZero:true, ticks:{ color:'#9aa5b1' }, grid:{ color:'rgba(255,255,255,0.05)' }, stacked: stackedMode }
+        }
+      }
+    });
+
+    kill(hourlyChart);
+    hourlyChart = new Chart(document.getElementById('hourlyChart'), {
+      type:'bar',
+      data:{
+        labels: hours.map((_,i)=> String(i).padStart(2,'0')),
+        datasets:[{
+          label:'Plays',
+          data: hours,
+          backgroundColor: hours.map((v,i)=> pickColor(i, v?0.75:0.15)),
+          borderRadius:4
+        }]
+      },
+      options:{ ...commonOpts, scales:{ x:{ ticks:{ color:'#9aa5b1' }, grid:{ display:false } }, y:{ beginAtZero:true, ticks:{ color:'#9aa5b1' }, grid:{ color:'rgba(255,255,255,0.05)' } } } }
+    });
+
+    kill(cumulativeChart);
+    cumulativeChart = new Chart(document.getElementById('cumulativeChart'), {
+      type:'line',
+      data:{
+        labels: cumPoints.map(p=>p.t),
+        datasets:[{
+          label:'Acumulado',
+          data: cumPoints.map(p=>p.v),
+          borderColor: pickColor(0,.95),
+          backgroundColor: pickColor(0,.18),
+          fill:true,
+          tension:.25,
+          pointRadius:0
+        }]
+      },
+      options:{ ...commonOpts,
+        scales:{
+          x:{ ticks:{ color:'#9aa5b1', maxRotation:48, minRotation:48 }, grid:{ color:'rgba(255,255,255,0.04)' } },
+          y:{ beginAtZero:true, ticks:{ color:'#9aa5b1' }, grid:{ color:'rgba(255,255,255,0.06)' } }
+        }
+      }
+    });
+
+    kill(topTracksChart);
+    topTracksChart = new Chart(document.getElementById('topTracksChart'), {
+      type:'bar',
+      data:{
+        labels: topTracks.map(t=> t.title.length>42 ? t.title.slice(0,42)+'…' : t.title),
+        datasets:[{
+          label:'Reproducciones',
+          data: topTracks.map(t=>t.count),
+          backgroundColor: topTracks.map((_,i)=> pickColor(i,0.7)),
+          borderRadius:6
+        }]
+      },
+      options:{ ...commonOpts, indexAxis:'y',
+        scales:{
+          x:{ beginAtZero:true, ticks:{ color:'#9aa5b1' }, grid:{ color:'rgba(255,255,255,0.05)' } },
+          y:{ ticks:{ color:'#d0d4d8' }, grid:{ display:false } }
+        }
+      }
+    });
+
+    kill(artistPieChart);
+    artistPieChart = new Chart(document.getElementById('artistPieChart'), {
+      type:'doughnut',
+      data:{
+        labels: artSorted.map(a=>a[0]),
+        datasets:[{
+          data: artSorted.map(a=>a[1]),
+          backgroundColor: artSorted.map((_,i)=> pickColor(i,0.85)),
+          borderWidth:0
+        }]
+      },
+      options:{
+        ...commonOpts,
+        plugins:{ ...commonOpts.plugins, legend:{ position:'bottom', labels:{ color:'#d0d4d8', boxWidth:14 } } },
+        cutout:'55%'
+      }
+    });
+
+    kill(stationBarChart);
+    stationBarChart = new Chart(document.getElementById('stationBarChart'), {
+      type:'bar',
+      data:{
+        labels: stationSorted.map(s=> s[0].length>32 ? s[0].slice(0,32)+'…' : s[0]),
+        datasets:[{
+          label:'Plays',
+          data: stationSorted.map(s=>s[1]),
+          backgroundColor: stationSorted.map((_,i)=>pickColor(i,0.7)),
+          borderRadius:6
+        }]
+      },
+      options:{ ...commonOpts,
+        scales:{
+          x:{ ticks:{ color:'#9aa5b1' }, grid:{ display:false } },
+          y:{ beginAtZero:true, ticks:{ color:'#9aa5b1' }, grid:{ color:'rgba(255,255,255,0.05)' } }
+        }
+      }
+    });
+
+    kill(cityPieChart);
+    cityPieChart = new Chart(document.getElementById('cityPieChart'), {
+      type:'pie',
+      data:{
+        labels: citySorted.map(c=>c[0]),
+        datasets:[{
+          data: citySorted.map(c=>c[1]),
+          backgroundColor: citySorted.map((_,i)=>pickColor(i,0.85)),
+          borderWidth:0
+        }]
+      },
+      options:{ ...commonOpts, plugins:{ ...commonOpts.plugins, legend:{ position:'bottom', labels:{ color:'#d0d4d8', boxWidth:12 } } } }
+    });
+
+    kill(heatmapChart);
+    heatmapChart = new Chart(document.getElementById('heatmapChart'), {
+      type:'bubble',
+      data:{
+        datasets:[{
+          label:'Intensidad',
+          data: heatData.map(o=>({ x:o.h, y:o.d, r:6+(18*(o.v/maxHeat)), v:o.v })),
+          backgroundColor: heatData.map(o=>{
+            const ratio=o.v/maxHeat;
+            return pickColor(Math.floor(ratio*14), 0.4+0.5*ratio);
+          }),
+          borderWidth:0
+        }]
+      },
+      options:{
+        ...commonOpts,
+        scales:{
+          x:{ min:-0.5,max:23.5, ticks:{ color:'#9aa5b1', callback:v=> String(v).padStart(2,'0') }, grid:{ color:'rgba(255,255,255,0.05)' } },
+          y:{ reverse:true,min:-0.5,max:6.5,
+              ticks:{ color:'#9aa5b1', callback:v=>['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'][v] },
+              grid:{ color:'rgba(255,255,255,0.05)' } }
+        },
+        plugins:{
+          ...commonOpts.plugins,
+          tooltip:{
+            callbacks:{
+              label: ctx=>{
+                const d=ctx.raw;
+                return 'Hora '+String(d.x).padStart(2,'0')+' · '+['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'][d.y]+': '+d.v+' plays';
+              }
+            }
+          }
+        }
+      }
+    });
+
+    kill(cityHourHeatmap);
+    cityHourHeatmap = new Chart(document.getElementById('cityHourHeatmap'), {
+      type:'bubble',
+      data:{
+        datasets:[{
+          label:'Ciudad-Hora',
+          data: chData.map(o=>{
+            const ratio=o.v/maxCH;
+            return { x:o.h, y:citiesOrder.indexOf(o.city), r:5+(18*ratio), v:o.v, city:o.city };
+          }),
+          backgroundColor: chData.map(o=>{
+            const ratio=o.v/maxCH;
+            return pickColor(Math.floor(ratio*14), 0.35+0.55*ratio);
+          }),
+          borderWidth:0
+        }]
+      },
+      options:{
+        ...commonOpts,
+        scales:{
+          x:{ min:-0.5,max:23.5, ticks:{ color:'#9aa5b1', callback:v=>String(v).padStart(2,'0') }, grid:{ color:'rgba(255,255,255,0.05)' } },
+          y:{ min:-0.5,max:citiesOrder.length-0.5, ticks:{ color:'#9aa5b1', callback:i=>citiesOrder[i] }, grid:{ color:'rgba(255,255,255,0.05)' } }
+        },
+        plugins:{
+          ...commonOpts.plugins,
+          tooltip:{
+            callbacks:{
+              label: ctx=>{
+                const d=ctx.raw;
+                return d.city+' '+String(d.x).padStart(2,'0')+'h: '+d.v;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  btnStack.addEventListener('click', ()=>{ stackedMode=true; applyFilters(); });
+  btnLines.addEventListener('click', ()=>{ stackedMode=false; applyFilters(); });
+
+  function dlCanvas(cnvId, name){
+    const cnv=document.getElementById(cnvId);
+    if(!cnv) return;
+    const url=cnv.toDataURL('image/png');
+    const a=document.createElement('a');
+    a.href=url; a.download=name;
+    document.body.appendChild(a); a.click();
+    setTimeout(()=>a.remove(),100);
+  }
+  btnImg.addEventListener('click', ()=> dlCanvas('trendChart','trend.png'));
+  dlTrend.addEventListener('click', ()=> dlCanvas('trendChart','trend.png'));
+  dlHourly.addEventListener('click', ()=> dlCanvas('hourlyChart','hourly.png'));
+  dlTopT.addEventListener('click', ()=> dlCanvas('topTracksChart','top_tracks.png'));
+  dlHeat.addEventListener('click', ()=> dlCanvas('heatmapChart','heatmap.png'));
+
+  document.getElementById('btnMoreRecent')?.addEventListener('click', ()=>{
+    const extra = currentFiltered.slice().sort((a,b)=> b.datetime.localeCompare(a.datetime)).slice(40,120);
+    if(!extra.length) return;
+    recentList.insertAdjacentHTML('beforeend', extra.map(p=>'<li class="flex flex-col border-b border-base-700/40 pb-2 last:border-none"><span class="text-gray-200">'+p.artist+'</span><span class="text-slatefx-300/70">'+p.title+'</span><span class="text-[10px] text-slatefx-300/40 mt-0.5">'+p.datetime+'</span></li>').join(''));
+  });
+
+  (function restoreFromHash(){
+    if(!location.hash) return;
+    const params = new URLSearchParams(location.hash.slice(1));
+    if(params.get('start')) fStart.value=params.get('start');
+    if(params.get('end')) fEnd.value=params.get('end');
+    if(params.get('artist')) fArtist.value=params.get('artist');
+    if(params.get('track')) fTrack.value=params.get('track');
+    if(params.get('hmin')) hMin.value=params.get('hmin');
+    if(params.get('hmax')) hMax.value=params.get('hmax');
+    if(params.get('station')) fStation.value=params.get('station');
+    if(params.get('city')) fCity.value=params.get('city');
+    if(params.get('days')){
+      params.get('days').split('').forEach(d=>{
+        activeDays.add(d);
+        const btn=[...dayBtns].find(b=>b.dataset.day===d);
+        btn?.classList.add('bg-accent-500/30','text-accent-200','border-accent-500/40');
+      });
+    }
+  })();
+
+  applyFilters();
+})();
+</script>
+<% } %>

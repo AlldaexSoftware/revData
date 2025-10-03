@@ -1,0 +1,154 @@
+<%- include('partials/header', { active: 'users' }) %>
+
+<section class="space-y-8">
+  <div class="rounded-xl p-6 bg-base-800/70 border border-base-700/60">
+    <div class="flex items-center justify-between flex-wrap gap-4">
+      <div>
+        <h2 class="text-xl font-semibold tracking-tight">Crear nuevo usuario</h2>
+        <p class="text-slatefx-300/60 text-sm mt-1">Credenciales, rol, membresía y artistas asignados.</p>
+      </div>
+      <a href="/admin/users" class="px-4 py-2 rounded-lg bg-base-700/60 hover:bg-base-600/60 text-xs font-semibold border border-base-600/50">Volver</a>
+    </div>
+
+    <% if (error) { %>
+      <div class="mt-5 px-4 py-3 rounded-md bg-red-800/40 border border-red-600/50 text-sm text-red-200">
+        <%= error %>
+      </div>
+    <% } %>
+
+    <form method="post" class="mt-6 space-y-8" autocomplete="off">
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- Columna izquierda: Datos del usuario -->
+        <div class="space-y-4">
+          <div class="text-[11px] uppercase tracking-wide text-slatefx-300/60">Datos</div>
+
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="text-[11px] uppercase tracking-wide text-slatefx-300/60">Membresía hasta *</label>
+              <input type="date" id="membershipExpires" name="membershipExpires" value="<%= (form && form.membershipExpires) || '' %>" required class="mt-1 w-full px-3 py-2 rounded-md bg-base-900/60 border border-base-700/60 focus:outline-none focus:ring-1 focus:ring-accent-500/50">
+              <p class="text-[10px] mt-1 text-slatefx-300/40">Válida hasta la fecha indicada (inclusive).</p>
+            </div>
+
+            <div>
+              <label class="text-[11px] uppercase tracking-wide text-slatefx-300/60">CC *</label>
+              <input name="cc" value="<%= form.cc %>" required class="mt-1 w-full px-3 py-2 rounded-md bg-base-900/60 border border-base-700/60 focus:outline-none focus:ring-1 focus:ring-accent-500/50">
+            </div>
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="text-[11px] uppercase tracking-wide text-slatefx-300/60">Nombre *</label>
+              <input name="name" value="<%= form.name %>" required class="mt-1 w-full px-3 py-2 rounded-md bg-base-900/60 border border-base-700/60 focus:outline-none focus:ring-1 focus:ring-accent-500/50">
+            </div>
+            <div>
+              <label class="text-[11px] uppercase tracking-wide text-slatefx-300/60">Usuario *</label>
+              <input name="username" value="<%= form.username %>" required class="mt-1 w-full px-3 py-2 rounded-md bg-base-900/60 border border-base-700/60 focus:outline-none focus:ring-1 focus:ring-accent-500/50">
+            </div>
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="text-[11px] uppercase tracking-wide text-slatefx-300/60">Email</label>
+              <input name="email" type="email" value="<%= form.email %>" class="mt-1 w-full px-3 py-2 rounded-md bg-base-900/60 border border-base-700/60 focus:outline-none focus:ring-1 focus:ring-accent-500/50">
+            </div>
+            <div>
+              <label class="text-[11px] uppercase tracking-wide text-slatefx-300/60">Password *</label>
+              <input name="password" type="password" required class="mt-1 w-full px-3 py-2 rounded-md bg-base-900/60 border border-base-700/60 focus:outline-none focus:ring-1 focus:ring-accent-500/50" placeholder="Mínimo 4 caracteres">
+            </div>
+          </div>
+
+          <div>
+            <label class="text-[11px] uppercase tracking-wide text-slatefx-300/60">Rol</label>
+            <select name="role" class="mt-1 w-full px-3 py-2 rounded-md bg-base-900/60 border border-base-700/60 focus:outline-none focus:ring-1 focus:ring-accent-500/50">
+              <option value="user" <%=form.role==='user' ?'selected':'' %>>User</option>
+              <option value="admin" <%=form.role==='admin' ?'selected':'' %>>Admin</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Columna derecha: Artistas -->
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="text-[11px] uppercase tracking-wide text-slatefx-300/60">Artistas (selección)</div>
+            <div class="text-[11px] text-slatefx-300/60">
+              Seleccionados: <span id="selCount" class="font-semibold text-accent-400">0</span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <input id="artistFilter" placeholder="Filtrar..." class="flex-1 px-3 py-2 rounded-md bg-base-900/60 border border-base-700/60 focus:outline-none focus:ring-1 focus:ring-accent-500/50">
+            <button type="button" id="btnSelectAll" class="px-2 py-1 text-[11px] rounded bg-base-700/60 hover:bg-base-600/60 border border-base-600/40">Todos</button>
+            <button type="button" id="btnClearAll" class="px-2 py-1 text-[11px] rounded bg-base-700/60 hover:bg-base-600/60 border border-base-600/40">Limpiar</button>
+          </div>
+
+          <div id="artistBox" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-1 max-h-72 overflow-auto pr-1 custom-scroll border border-base-700/60 rounded-md p-2 bg-base-900/40">
+            <% artists.forEach(a=> { %>
+              <label class="flex items-center gap-2 text-xs px-2 py-1 rounded hover:bg-base-700/40 cursor-pointer">
+                <!-- nota: sin name, solo value; se recoge en JS y se envía por hidden 'artists' -->
+                <input type="checkbox" value="<%= a %>" <%=form.artistsAssigned.includes(a)?'checked':'' %> class="accent-accent-500 artist-check">
+                <span class="truncate" title="<%= a %>"><%= a %></span>
+              </label>
+            <% }) %>
+          </div>
+          <p class="text-[10px] text-slatefx-300/40">Se asignarán los marcados. Usa el filtro para encontrar rápido.</p>
+
+          <div>
+            <label class="text-[11px] uppercase tracking-wide text-slatefx-300/60">Añadir manual (coma)</label>
+            <input id="manualArtists" placeholder="ARTISTA A, ARTISTA B" class="mt-1 w-full px-3 py-2 rounded-md bg-base-900/60 border border-base-700/60 focus:outline-none focus:ring-1 focus:ring-accent-500/50">
+            <p class="text-[10px] text-slatefx-300/40 mt-1">Se combinarán al enviar.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- único campo que se envía con todos los artistas -->
+      <input type="hidden" name="artists" id="hiddenArtists">
+
+      <div class="flex items-center gap-3">
+        <button class="px-5 py-2 rounded-lg bg-gradient-to-r from-accent-500 to-accent-600 text-base-900 text-sm font-semibold shadow-glow">Crear</button>
+        <a href="/admin/users" class="px-4 py-2 rounded-lg bg-base-700/60 hover:bg-base-600/60 text-xs font-semibold border border-base-600/50">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+
+<script>
+  (function() {
+    const artistFilter = document.getElementById('artistFilter');
+    const artistBox = document.getElementById('artistBox');
+    const btnSelectAll = document.getElementById('btnSelectAll');
+    const btnClearAll = document.getElementById('btnClearAll');
+    const hiddenArtists = document.getElementById('hiddenArtists');
+    const manual = document.getElementById('manualArtists');
+    const form = document.querySelector('form');
+    const selCount = document.getElementById('selCount');
+
+    function getChecks() {
+      return Array.from(artistBox.querySelectorAll('.artist-check'));
+    }
+    function updateCount() {
+      selCount.textContent = getChecks().filter(c => c.checked).length;
+    }
+    function filterList() {
+      const q = (artistFilter.value || '').toLowerCase();
+      artistBox.querySelectorAll('label').forEach(l => {
+        const txt = l.textContent.toLowerCase();
+        l.style.display = txt.includes(q) ? 'flex' : 'none';
+      });
+    }
+
+    artistFilter.addEventListener('input', filterList);
+    btnSelectAll.addEventListener('click', () => { getChecks().forEach(c => c.checked = true); updateCount(); });
+    btnClearAll.addEventListener('click', () => { getChecks().forEach(c => c.checked = false); updateCount(); });
+    artistBox.addEventListener('change', updateCount);
+    updateCount(); // inicial
+
+    form.addEventListener('submit', () => {
+      const selected = getChecks().filter(c => c.checked).map(c => c.value);
+      const manualExtra = (manual.value || '').split(',').map(s => s.trim()).filter(Boolean);
+      const merged = [...new Set([...selected, ...manualExtra])];
+      hiddenArtists.value = merged.join(',');
+    });
+  })();
+</script>

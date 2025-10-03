@@ -1,0 +1,62 @@
+<%- include('partials/header', { active: 'radios' }) %>
+
+<section class="space-y-6">
+  <div class="flex items-center justify-between">
+    <h1 class="text-xl font-bold">Emisoras</h1>
+    <a href="/admin/radios/new" class="px-4 py-2 rounded bg-accent-500 text-base-900 text-sm font-semibold hover:bg-accent-400 transition">Nueva</a>
+  </div>
+
+  <% if (created||updated||deleted||toggled) { %>
+    <div class="text-xs px-3 py-2 rounded bg-base-800 border border-base-700">
+      <% if(created){ %>Creada. <% } %>
+      <% if(updated){ %>Actualizada. <% } %>
+      <% if(deleted){ %>Eliminada. <% } %>
+      <% if(toggled){ %>Estado cambiado. <% } %>
+    </div>
+  <% } %>
+
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead class="text-xs uppercase text-slatefx-400/60">
+        <tr>
+          <th class="text-left py-2 pr-4">ID</th>
+          <th class="text-left py-2 pr-4">Ciudad</th>
+          <th class="text-left py-2 pr-4">Nombre</th>
+          <th class="text-left py-2 pr-4">URL</th>
+          <th class="text-left py-2 pr-4">Activa</th>
+          <th class="py-2 pr-2"></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-base-700/40">
+        <% radios.forEach(r => { %>
+          <tr>
+            <td class="py-2 pr-4 font-mono text-[11px]"><%= r.id %></td>
+            <td class="py-2 pr-4"><%= r.city || '-' %></td>
+            <td class="py-2 pr-4"><%= r.name %></td>
+            <td class="py-2 pr-4 max-w-xs truncate">
+              <a href="<%= r.url %>" target="_blank" class="text-accent-400 hover:underline"><%= r.url %></a>
+            </td>
+            <td class="py-2 pr-4">
+              <form method="post" action="/admin/radios/<%= r.id %>/toggle">
+                <button class="px-2 py-1 rounded text-xs <%= r.active ? 'bg-green-600/40 text-green-200' : 'bg-base-700 text-slate-300' %>">
+                  <%= r.active ? 'Sí' : 'No' %>
+                </button>
+              </form>
+            </td>
+            <td class="py-2 pr-2 flex gap-3">
+              <a href="/admin/radios/<%= r.id %>/edit" class="text-accent-400 hover:text-accent-300 text-xs">Editar</a>
+              <form method="post" action="/admin/radios/<%= r.id %>/delete" onsubmit="return confirm('Eliminar <%= r.city %> - <%= r.name %>?');">
+                <button class="text-red-400 hover:text-red-300 text-xs">Borrar</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+        <% if(!radios.length){ %>
+          <tr><td colspan="6" class="py-6 text-center text-xs text-slatefx-400/50">Sin emisoras</td></tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

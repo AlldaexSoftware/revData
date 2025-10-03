@@ -1,0 +1,39 @@
+</main>
+
+  <footer class="mt-10 border-t border-base-700/40 bg-base-850/70 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-5 py-7 flex flex-col md:flex-row gap-6 md:gap-4 md:items-center justify-between">
+      <div class="flex items-center gap-4">
+        <div class="w-10 h-10 rounded-md bg-gradient-to-br from-accent-400 to-accent-600 flex items-center justify-center shadow-glow">
+          <svg viewBox="0 0 24 24" class="w-5 h-5 text-base-900">
+            <path fill="currentColor" d="M4 4h6.8c3.9 0 6.2 2 6.2 5.2 0 2.6-1.6 4.3-4.3 4.9L19 20h-4.6l-5.2-6.9v6.9H4V4Zm4.2 3.2v4.2h2.2c1.7 0 2.6-.7 2.6-2.1S12.3 7.2 10.4 7.2H8.2Z"/>
+          </svg>
+        </div>
+        <div class="text-xs sm:text-sm text-slatefx-300/85">
+          <span class="font-semibold text-gray-200">REVDATA</span> · Plataforma de análisis de radio
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 text-[12px] sm:text-xs">
+        <a class="px-3 py-1.5 rounded-md bg-base-800/70 hover:bg-base-700/70 transition text-slatefx-300/80" href="#">Docs</a>
+        <a class="px-3 py-1.5 rounded-md bg-base-800/70 hover:bg-base-700/70 transition text-slatefx-300/80" href="#">Contacto</a>
+        <span class="px-3 py-1.5 rounded-md bg-base-800/60 text-slatefx-300/60">v1.0</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const items = Array.from(document.querySelectorAll('main > *'));
+      items.forEach((el,i)=>{
+        el.style.opacity = 0;
+        el.style.transform = 'translateY(14px)';
+        el.style.transition = 'opacity .65s cubic-bezier(.22,.9,.3,1) '+(i*55)+'ms, transform .65s cubic-bezier(.22,.9,.3,1) '+(i*55)+'ms';
+        requestAnimationFrame(()=> {
+          el.style.opacity = 1;
+          el.style.transform = 'translateY(0)';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

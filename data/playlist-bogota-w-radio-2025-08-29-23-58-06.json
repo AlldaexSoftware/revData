@@ -1,0 +1,38 @@
+{
+  "source": "https://onlineradiobox.com/co/wradio/playlist/?cs=co.wradio",
+  "station_id": "bogota-w-radio",
+  "station_city": "Bogotá",
+  "station_name": "W Radio",
+  "station_label": "Bogotá - W Radio",
+  "station_url": "https://onlineradiobox.com/co/wradio/playlist/?cs=co.wradio",
+  "scraped_at": "2025-08-29 23:58:06",
+  "count": 2,
+  "items": [
+    {
+      "station_id": "bogota-w-radio",
+      "station_city": "Bogotá",
+      "station_name": "W Radio",
+      "station_label": "Bogotá - W Radio",
+      "station_url": "https://onlineradiobox.com/co/wradio/playlist/?cs=co.wradio",
+      "date_played": "2025-08-29",
+      "time_played": "21:57",
+      "artist": "Juan Magán",
+      "title": "Verano azul",
+      "raw": "Juan Magán - Verano azul",
+      "link": null
+    },
+    {
+      "station_id": "bogota-w-radio",
+      "station_city": "Bogotá",
+      "station_name": "W Radio",
+      "station_label": "Bogotá - W Radio",
+      "station_url": "https://onlineradiobox.com/co/wradio/playlist/?cs=co.wradio",
+      "date_played": "2025-08-29",
+      "time_played": "12:41",
+      "artist": "Leea",
+      "title": "Instinto animal",
+      "raw": "Leea - Instinto animal",
+      "link": "https://onlineradiobox.com/track/738192014492559017/"
+    }
+  ]
+}

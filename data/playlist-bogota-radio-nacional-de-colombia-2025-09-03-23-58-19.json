@@ -1,0 +1,103 @@
+{
+  "source": "https://onlineradiobox.com/co/nacionaldecolombia/playlist/?cs=co.nacionaldecolombia",
+  "station_id": "bogota-radio-nacional-de-colombia",
+  "station_city": "Bogotá",
+  "station_name": "Radio Nacional de Colombia",
+  "station_label": "Bogotá - Radio Nacional de Colombia",
+  "station_url": "https://onlineradiobox.com/co/nacionaldecolombia/playlist/?cs=co.nacionaldecolombia",
+  "scraped_at": "2025-09-03 23:58:19",
+  "count": 7,
+  "items": [
+    {
+      "station_id": "bogota-radio-nacional-de-colombia",
+      "station_city": "Bogotá",
+      "station_name": "Radio Nacional de Colombia",
+      "station_label": "Bogotá - Radio Nacional de Colombia",
+      "station_url": "https://onlineradiobox.com/co/nacionaldecolombia/playlist/?cs=co.nacionaldecolombia",
+      "date_played": "2025-09-03",
+      "time_played": "En directo",
+      "artist": "Trenzada",
+      "title": "Leo Merchan",
+      "raw": "Trenzada - Leo Merchan",
+      "link": "https://onlineradiobox.com/track/2233845383468903077/"
+    },
+    {
+      "station_id": "bogota-radio-nacional-de-colombia",
+      "station_city": "Bogotá",
+      "station_name": "Radio Nacional de Colombia",
+      "station_label": "Bogotá - Radio Nacional de Colombia",
+      "station_url": "https://onlineradiobox.com/co/nacionaldecolombia/playlist/?cs=co.nacionaldecolombia",
+      "date_played": "2025-09-03",
+      "time_played": "03:33",
+      "artist": null,
+      "title": "RADIO NACIONAL",
+      "raw": "RADIO NACIONAL",
+      "link": null
+    },
+    {
+      "station_id": "bogota-radio-nacional-de-colombia",
+      "station_city": "Bogotá",
+      "station_name": "Radio Nacional de Colombia",
+      "station_label": "Bogotá - Radio Nacional de Colombia",
+      "station_url": "https://onlineradiobox.com/co/nacionaldecolombia/playlist/?cs=co.nacionaldecolombia",
+      "date_played": "2025-09-03",
+      "time_played": "03:32",
+      "artist": "Carmenza",
+      "title": "Emir Boscan",
+      "raw": "Carmenza - Emir Boscan",
+      "link": "https://onlineradiobox.com/track/1819055956100130002/"
+    },
+    {
+      "station_id": "bogota-radio-nacional-de-colombia",
+      "station_city": "Bogotá",
+      "station_name": "Radio Nacional de Colombia",
+      "station_label": "Bogotá - Radio Nacional de Colombia",
+      "station_url": "https://onlineradiobox.com/co/nacionaldecolombia/playlist/?cs=co.nacionaldecolombia",
+      "date_played": "2025-09-03",
+      "time_played": "02:34",
+      "artist": "Capullo De Rosa Blanca",
+      "title": "Gustavo Quintero",
+      "raw": "Capullo De Rosa Blanca - Gustavo Quintero",
+      "link": "https://onlineradiobox.com/track/1170537415476311212/"
+    },
+    {
+      "station_id": "bogota-radio-nacional-de-colombia",
+      "station_city": "Bogotá",
+      "station_name": "Radio Nacional de Colombia",
+      "station_label": "Bogotá - Radio Nacional de Colombia",
+      "station_url": "https://onlineradiobox.com/co/nacionaldecolombia/playlist/?cs=co.nacionaldecolombia",
+      "date_played": "2025-09-03",
+      "time_played": "01:26",
+      "artist": null,
+      "title": "RADIO NACIONAL",
+      "raw": "RADIO NACIONAL",
+      "link": null
+    },
+    {
+      "station_id": "bogota-radio-nacional-de-colombia",
+      "station_city": "Bogotá",
+      "station_name": "Radio Nacional de Colombia",
+      "station_label": "Bogotá - Radio Nacional de Colombia",
+      "station_url": "https://onlineradiobox.com/co/nacionaldecolombia/playlist/?cs=co.nacionaldecolombia",
+      "date_played": "2025-09-03",
+      "time_played": "01:25",
+      "artist": "Un Gato En La Oscuridad",
+      "title": "Roberto Carlos",
+      "raw": "Un Gato En La Oscuridad - Roberto Carlos",
+      "link": "https://onlineradiobox.com/track/710554/"
+    },
+    {
+      "station_id": "bogota-radio-nacional-de-colombia",
+      "station_city": "Bogotá",
+      "station_name": "Radio Nacional de Colombia",
+      "station_label": "Bogotá - Radio Nacional de Colombia",
+      "station_url": "https://onlineradiobox.com/co/nacionaldecolombia/playlist/?cs=co.nacionaldecolombia",
+      "date_played": "2025-09-03",
+      "time_played": "00:17",
+      "artist": "Vagabundear",
+      "title": "Joan Manuel Serrat",
+      "raw": "Vagabundear - Joan Manuel Serrat",
+      "link": "https://onlineradiobox.com/track/937805/"
+    }
+  ]
+}

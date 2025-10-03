@@ -1,0 +1,51 @@
+{
+  "source": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+  "station_id": "bogota-vibra",
+  "station_city": "Bogotá",
+  "station_name": "Vibra",
+  "station_label": "Bogotá - Vibra",
+  "station_url": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+  "scraped_at": "2025-09-04 23:58:10",
+  "count": 3,
+  "items": [
+    {
+      "station_id": "bogota-vibra",
+      "station_city": "Bogotá",
+      "station_name": "Vibra",
+      "station_label": "Bogotá - Vibra",
+      "station_url": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+      "date_played": "2025-09-04",
+      "time_played": "En directo",
+      "artist": "Cuarto Aparte",
+      "title": "Todo de ti",
+      "raw": "Cuarto Aparte - Todo de ti",
+      "link": "https://onlineradiobox.com/track/1873714790217418575/"
+    },
+    {
+      "station_id": "bogota-vibra",
+      "station_city": "Bogotá",
+      "station_name": "Vibra",
+      "station_label": "Bogotá - Vibra",
+      "station_url": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+      "date_played": "2025-09-04",
+      "time_played": "23:53",
+      "artist": null,
+      "title": "1280 Almas Marinero",
+      "raw": "1280 Almas Marinero",
+      "link": "https://onlineradiobox.com/track/1441245826709424570/"
+    },
+    {
+      "station_id": "bogota-vibra",
+      "station_city": "Bogotá",
+      "station_name": "Vibra",
+      "station_label": "Bogotá - Vibra",
+      "station_url": "https://onlineradiobox.com/co/vibra/?cs=co.olmpicabogota",
+      "date_played": "2025-09-04",
+      "time_played": "23:51",
+      "artist": null,
+      "title": "Reik Nada",
+      "raw": "Reik Nada",
+      "link": "https://onlineradiobox.com/track/1746998161681584427/"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>REVDATA</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">REVDATA</div>
+    <nav>
+      <% if (me) { %>
+        <span class="nav-item">Hola, <%= me.name %></span>
+        <% if (me.role === 'admin') { %>
+          <a class="nav-link" href="/admin/users">Usuarios</a>
+        <% } else { %>
+          <a class="nav-link" href="/user/dashboard">Dashboard</a>
+        <% } %>
+        <a class="nav-link" href="/profile">Perfil</a>
+        <a class="nav-link" href="/logout">Salir</a>
+      <% } else { %>
+        <a class="nav-link" href="/login">Login</a>
+      <% } %>
+    </nav>
+  </header>
+  <main class="container">

@@ -1,0 +1,205 @@
+<%- include('partials/header') %>
+
+<section class="grid md:grid-cols-12 gap-6">
+  <!-- left summary -->
+  <aside class="md:col-span-4 bg-white/3 rounded-xl p-5 space-y-4">
+    <div class="flex items-center gap-4">
+      <div class="w-16 h-16 rounded-lg bg-gradient-to-b from-red-500 to-red-700 flex items-center justify-center text-black font-extrabold text-2xl">
+        <%= (user.name||user.username||'U').charAt(0).toUpperCase() %>
+      </div>
+      <div>
+        <div class="font-bold text-lg"><%= user.name %></div>
+        <div class="text-sm text-gray-400"><%= user.role %> • <%= user.username %></div>
+      </div>
+    </div>
+
+    <div class="border-t border-white/5 pt-3 text-sm text-gray-300">
+      <div class="flex justify-between py-1"><span class="text-gray-400">CC</span><span class="font-medium text-white"><%= user.cc || '-' %></span></div>
+      <div class="flex justify-between py-1"><span class="text-gray-400">Correo</span><span class="font-medium text-white"><%= user.email || '-' %></span></div>
+
+      <div class="flex justify-between py-1">
+        <span class="text-gray-400">Membresía hasta</span>
+        <span class="font-medium text-white"><%= user.membershipExpires || '(sin fecha)' %></span>
+      </div>
+
+      <div class="pt-2 text-gray-400">Artistas asignados</div>
+      <div id="assigned-preview" class="mt-2 flex flex-wrap gap-2">
+        <% if (user.artistsAssigned && user.artistsAssigned.length) { %>
+          <% user.artistsAssigned.forEach(a => { %>
+            <span class="px-3 py-1 bg-white/5 rounded-full text-sm"><%= a %></span>
+          <% }) %>
+        <% } else { %>
+          <div class="text-gray-500">(ninguno)</div>
+        <% } %>
+      </div>
+    </div>
+
+    <div class="flex gap-3">
+      <a href="/admin/users" class="px-3 py-2 rounded-lg bg-white/5">Volver</a>
+      <a href="/user/dashboard" class="px-3 py-2 rounded-lg bg-transparent border border-white/5 text-sm">Ver como usuario</a>
+    </div>
+  </aside>
+
+  <!-- right: edit form -->
+  <div class="md:col-span-8 bg-white/3 rounded-xl p-6">
+    <h2 class="text-lg font-semibold mb-3">Editar usuario — <span class="text-red-400"><%= user.username %></span></h2>
+
+    <% if (typeof error === 'string' && error) { %>
+      <div class="mb-4 p-3 rounded bg-red-500/10 border border-red-500/30 text-red-200 text-sm"><%= error %></div>
+    <% } %>
+
+    <form id="editUserForm" method="post" action="/admin/users/<%= user.id %>/edit" autocomplete="off" class="space-y-4">
+      <div class="grid sm:grid-cols-2 gap-3">
+        <label class="block">
+          <div class="text-sm text-gray-300">Membresía hasta</div>
+          <input type="date" id="membershipExpires" name="membershipExpires" value="<%= user.membershipExpires || '' %>" class="w-full px-3 py-2 rounded-lg bg-transparent border border-white/5" />
+          <small class="text-gray-400">Dejar en blanco mantiene la fecha actual.</small>
+        </label>
+
+        <label class="block">
+          <div class="text-sm text-gray-300">CC</div>
+          <input name="cc" value="<%= user.cc || '' %>" class="w-full px-3 py-2 rounded-lg bg-transparent border border-white/5" placeholder="Documento" />
+        </label>
+
+        <label class="block">
+          <div class="text-sm text-gray-300">Usuario</div>
+          <input name="username" value="<%= user.username || '' %>" required class="w-full px-3 py-2 rounded-lg bg-transparent border border-white/5" />
+        </label>
+
+        <label class="block">
+          <div class="text-sm text-gray-300">Nombre</div>
+          <input name="name" value="<%= user.name || '' %>" required class="w-full px-3 py-2 rounded-lg bg-transparent border border-white/5" />
+        </label>
+
+        <label class="block">
+          <div class="text-sm text-gray-300">Correo</div>
+          <input name="email" type="email" value="<%= user.email || '' %>" class="w-full px-3 py-2 rounded-lg bg-transparent border border-white/5" />
+        </label>
+
+        <label class="block">
+          <div class="text-sm text-gray-300">Rol</div>
+          <select name="role" class="w-full px-3 py-2 rounded-lg bg-transparent border border-white/5">
+            <option value="user" <%= user.role==='user'?'selected':'' %>>Usuario</option>
+            <option value="admin" <%= user.role==='admin'?'selected':'' %>>Admin</option>
+          </select>
+        </label>
+
+        <label class="block">
+          <div class="text-sm text-gray-300">Contraseña (dejar vacío para no cambiar)</div>
+          <input id="password" name="password" type="password" placeholder="Nueva contraseña" class="w-full px-3 py-2 rounded-lg bg-transparent border border-white/5" />
+          <div class="h-2 bg-white/5 rounded-full overflow-hidden mt-2">
+            <div id="pwStrength" class="h-full w-0 bg-gradient-to-r from-red-400 to-red-600"></div>
+          </div>
+        </label>
+      </div>
+
+      <div>
+        <div class="text-sm text-gray-300 mb-2">Artistas asignados</div>
+        <div class="flex gap-2 mb-2">
+          <input id="artistInput" placeholder="Agregar artista y presiona Enter" class="flex-1 px-3 py-2 rounded-lg bg-transparent border border-white/5" />
+          <button type="button" id="addArtistBtn" class="px-3 py-2 rounded-lg bg-white/5">Añadir</button>
+        </div>
+
+        <div id="tags" class="flex flex-wrap gap-2 mb-3">
+          <% (user.artistsAssigned || []).forEach(a => { %>
+          <span class="tag-item inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 text-sm" data-val="<%= a %>">
+            <span><%= a %></span>
+            <button type="button" class="remove-tag text-gray-400">✕</button>
+          </span>
+          <% }) %>
+        </div>
+
+        <div class="mb-3">
+          <div class="text-sm text-gray-300 mb-2">Seleccionar desde la lista (Ctrl/Cmd para múltiples)</div>
+          <select id="artistSelect" multiple size="6" class="w-full bg-transparent border border-white/5 rounded-lg p-2 text-sm">
+            <% artists.forEach(a => { %>
+            <option value="<%= a %>" <%= (user.artistsAssigned && user.artistsAssigned.indexOf(a)!==-1) ? 'selected' : '' %>><%= a %></option>
+            <% }) %>
+          </select>
+        </div>
+
+        <div id="hiddenArtistsInputs"></div>
+
+        <div class="flex gap-3">
+          <button class="px-4 py-2 rounded-lg bg-red-600 text-black font-semibold" type="submit">Guardar cambios</button>
+          <a class="px-4 py-2 rounded-lg bg-transparent border border-white/5" href="/admin/users">Cancelar</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+
+<script>
+  (function() {
+    const tagsEl = document.getElementById('tags');
+    const artistInput = document.getElementById('artistInput');
+    const addBtn = document.getElementById('addArtistBtn');
+    const select = document.getElementById('artistSelect');
+    const hiddenWrap = document.getElementById('hiddenArtistsInputs');
+    const form = document.getElementById('editUserForm');
+
+    function createTag(name) {
+      name = (name || '').trim();
+      if (!name) return;
+      const exists = Array.from(tagsEl.querySelectorAll('.tag-item')).some(t => t.dataset.val.toLowerCase() === name.toLowerCase());
+      if (exists) return;
+      const span = document.createElement('span');
+      span.className = 'tag-item inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 text-sm';
+      span.dataset.val = name;
+      span.innerHTML = '<span></span><button type="button" class="remove-tag text-gray-400">✕</button>';
+      span.querySelector('span').textContent = name;
+      tagsEl.appendChild(span);
+      span.querySelector('.remove-tag').addEventListener('click', () => span.remove());
+    }
+
+    addBtn.addEventListener('click', () => {
+      createTag(artistInput.value);
+      artistInput.value = '';
+      artistInput.focus();
+    });
+    artistInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        createTag(artistInput.value);
+        artistInput.value = '';
+      }
+    });
+
+    tagsEl.querySelectorAll('.remove-tag').forEach(b => b.addEventListener('click', ev => ev.target.closest('.tag-item').remove()));
+
+    select.addEventListener('change', () => {
+      Array.from(select.selectedOptions).forEach(opt => createTag(opt.value));
+    });
+
+    const pw = document.getElementById('password');
+    const pwStrength = document.getElementById('pwStrength');
+    if (pw) {
+      pw.addEventListener('input', () => {
+        const v = pw.value;
+        let score = 0;
+        if (v.length >= 8) score++;
+        if (/[A-Z]/.test(v)) score++;
+        if (/[0-9]/.test(v)) score++;
+        if (/[^A-Za-z0-9]/.test(v)) score++;
+        const pct = Math.min(100, (score / 4) * 100);
+        pwStrength.style.width = pct + '%';
+      });
+    }
+
+    form.addEventListener('submit', () => {
+      hiddenWrap.innerHTML = '';
+      const values = new Set();
+      Array.from(tagsEl.querySelectorAll('.tag-item')).forEach(t => values.add(t.dataset.val));
+      Array.from(select.selectedOptions).forEach(o => values.add(o.value));
+      values.forEach(v => {
+        const inp = document.createElement('input');
+        inp.type = 'hidden';
+        inp.name = 'artists';
+        inp.value = v;
+        hiddenWrap.appendChild(inp);
+      });
+    });
+  })();
+</script>

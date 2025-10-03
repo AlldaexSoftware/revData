@@ -1,0 +1,25 @@
+{
+  "source": "https://onlineradiobox.com/co/wradio/playlist/?cs=co.wradio",
+  "station_id": "bogota-w-radio",
+  "station_city": "Bogotá",
+  "station_name": "W Radio",
+  "station_label": "Bogotá - W Radio",
+  "station_url": "https://onlineradiobox.com/co/wradio/playlist/?cs=co.wradio",
+  "scraped_at": "2025-09-05 23:58:06",
+  "count": 1,
+  "items": [
+    {
+      "station_id": "bogota-w-radio",
+      "station_city": "Bogotá",
+      "station_name": "W Radio",
+      "station_label": "Bogotá - W Radio",
+      "station_url": "https://onlineradiobox.com/co/wradio/playlist/?cs=co.wradio",
+      "date_played": "2025-09-05",
+      "time_played": "05:48",
+      "artist": "Ryan Castro,SOG",
+      "title": "El ritmo que nos une",
+      "raw": "Ryan Castro,SOG - El ritmo que nos une",
+      "link": null
+    }
+  ]
+}
